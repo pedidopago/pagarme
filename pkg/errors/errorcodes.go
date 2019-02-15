@@ -58,6 +58,7 @@ var errAgent = map[string]string{
 	"2009": "Cartão bloqueado por perda ou roubo",
 	"2010": "Cartão com suspeita de falsificação",
 	"9103": "Retente a transação.",
+	"9124": "Número do cartão (ou código de segurança) inválido.",
 }
 
 var errClient = map[string]string{
@@ -112,6 +113,7 @@ var errClient = map[string]string{
 	"2009": "Cartão bloqueado. Por favor, entre em contato com a central de seu cartão.",
 	"2010": "Cartão não autorizado. Por favor, entre em contato com a central de seu cartão.",
 	"9103": "Esta tentativa de transação não foi efetivada. Por favor, retente a transação.",
+	"9124": "Código de segurança inválido.",
 }
 
 var errPagarme = map[string]string{
@@ -166,6 +168,7 @@ var errPagarme = map[string]string{
 	"2009": "Cartão bloqueado.",
 	"2010": "Cartão bloqueado.",
 	"9103": "Retente a transação.",
+	"9124": "Código de segurança inválido.",
 }
 
 // PaymentError is a container of error messages.
