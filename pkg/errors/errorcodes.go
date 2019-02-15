@@ -189,8 +189,8 @@ func GetPaymentError(code string) PaymentError {
 	return PaymentError{
 		Code:       "XXXX",
 		MsgPagarme: "Erro desconhecido (" + code + ")",
-		MsgAgent:   "Erro desconhecido (" + code + ")",
-		MsgClient:  "Erro. Por favor, entre em contato com a nossa gerência.",
+		MsgAgent:   "Erro desconhecido (PME" + code + ")",
+		MsgClient:  "Erro. Por favor, entre em contato com a nossa gerência. (PME" + code + ")",
 	}
 }
 
