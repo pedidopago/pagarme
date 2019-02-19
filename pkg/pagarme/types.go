@@ -29,12 +29,14 @@ type Document struct {
 }
 
 type SplitRule struct {
-	Liable              bool   `json:"liable"`
-	ChargeProcessingFee bool   `json:"charge_processing_fee"`
-	Percentage          string `json:"percentage,omitempty"`
-	Amount              string `json:"amount,omitempty"`
-	ChargeRemainderFee  bool   `json:"charge_remainder_fee"`
-	RecipientID         string `json:"recipient_id"`
+	Object              string        `json:"object,omitempty"`
+	ID                  string        `json:"id,omitempty"`
+	Liable              bool          `json:"liable"`
+	ChargeProcessingFee bool          `json:"charge_processing_fee"`
+	Percentage          Float64String `json:"percentage,omitempty"`
+	Amount              Float64String `json:"amount,omitempty"`
+	ChargeRemainderFee  bool          `json:"charge_remainder_fee"`
+	RecipientID         string        `json:"recipient_id"`
 }
 
 type Customer struct {
