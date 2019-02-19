@@ -53,17 +53,17 @@ type Transaction struct {
 	CardBrand            string     `json:"card_brand,omitempty"`
 	Card                 *Card      `json:"card,omitempty"`
 	CaptureMethod        string     `json:"capture_method,omitempty"`
-	// card_pin_mode
+	CardPinMode          string     `json:"card_pin_mode,omitempty"`
 	// card_magstripe_fallback
-	// antifraud_score
-	BoletoURL     string `json:"boleto_url,omitempty"`
-	BoletoBarcode string `json:"boleto_barcode,omitempty"`
-	Referer       string `json:"referer,omitempty"`
-	IP            string `json:"ip,omitempty"`
-	// subscription_id
+	AntifraudScore float64 `json:"antifraud_score,omitempty"`
+	BoletoURL      string  `json:"boleto_url,omitempty"`
+	BoletoBarcode  string  `json:"boleto_barcode,omitempty"`
+	Referer        string  `json:"referer,omitempty"`
+	IP             string  `json:"ip,omitempty"`
+	SubscriptionID string  `json:"subscription_id,omitempty"`
 	// phone
 	// address
-	// antifraud_metadata
+	AntifraudMetadata map[string]interface{} `json:"antifraud_metadata,omitempty"`
 	// reference_key
 	// device
 	// local_transaction_id
