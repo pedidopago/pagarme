@@ -20,6 +20,9 @@ func New(cfg *pagarme.Config) *API {
 	}
 }
 
+// Put creates a new transaction
+//
+// POST https://api.pagar.me/1/transactions
 func (api *API) Put(tr *pagarme.Transaction) (*pagarme.Response, *pagarme.Transaction, error) {
 	resp, err := api.Config.Do(http.MethodPost, "/transactions", www.JSONReader(tr))
 	if err != nil {
@@ -37,15 +40,36 @@ func (api *API) Put(tr *pagarme.Transaction) (*pagarme.Response, *pagarme.Transa
 		}
 	} else {
 		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
 			return nil, nil, err
 		}
 	}
 	return www.Ok(), result, nil
 }
 
+// Get a transaction by ID
+//
+// GET https://api.pagar.me/1/transactions/id
+func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error) {
+	resp, err := api.Config.Do(http.MethodGet, "/transactions/"+tid, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if werr := www.ExtractError(resp); werr != nil {
+		return werr, nil, nil
+	}
+	result := &pagarme.Transaction{}
+	if err := www.Unmarshal(resp, result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transaction [Get]: " + err.Error())
+		return nil, nil, err
+	}
+
+	return www.Ok(), result, nil
+}
+
 // https://www.febraban.org.br/associados/utilitarios/bancos.asp?msg=&id_assunto=84&id_pasta=0&tipo=
 
+// RefundInput is the input data for Refund
 type RefundInput struct {
 	// O estorno parcial obedece as mesmas regras de um estorno total, e usa o parâmetro amount como
 	// referência para o valor a ser estornado. É bom observar que o status da transação vai permanecer
@@ -65,6 +89,9 @@ type RefundInput struct {
 	Metadata       map[string]interface{}  `json:"metadata,omitempty"`
 }
 
+// Refund refunds a transaction
+//
+// POST https://api.pagar.me/1/transactions/transaction_id/refund
 func (api *API) Refund(id int64, input *RefundInput) (*pagarme.Response, *pagarme.Transaction, error) {
 	resp, err := api.Config.Do(http.MethodPost, "/transactions/"+strconv.Itoa(int(id))+"/refund", www.JSONReader(input))
 	if err != nil {
