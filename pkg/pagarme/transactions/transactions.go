@@ -67,6 +67,30 @@ func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error)
 	return www.Ok(), result, nil
 }
 
+// PutDevBillet (Testando pagamento de Boletos)
+//
+// Usado apenas em ambiente de Teste para simular o pagamento de um Boleto.
+//
+// PUT https://api.pagar.me/1/transactions/transaction_id
+func (api *API) PutDevBillet(tid string, status pagarme.TrStatus) (*pagarme.Response, *pagarme.Transaction, error) {
+	resp, err := api.Config.Do(http.MethodPut, "/transactions/"+tid, www.JSONReader(map[string]interface{}{
+		"status": string(status),
+	}))
+	if err != nil {
+		return nil, nil, err
+	}
+	if werr := www.ExtractError(resp); werr != nil {
+		return werr, nil, nil
+	}
+	result := &pagarme.Transaction{}
+	if err := www.Unmarshal(resp, result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transaction [Get]: " + err.Error())
+		return nil, nil, err
+	}
+
+	return www.Ok(), result, nil
+}
+
 // https://www.febraban.org.br/associados/utilitarios/bancos.asp?msg=&id_assunto=84&id_pasta=0&tipo=
 
 // RefundInput is the input data for Refund
