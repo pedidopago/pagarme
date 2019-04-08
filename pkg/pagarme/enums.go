@@ -46,6 +46,22 @@ const (
 	TrRefused        TrStatus = "refused"
 )
 
+type PayableStatus string
+
+const (
+	PbsPaid         PayableStatus = "paid"
+	PbsWaitingFunds PayableStatus = "waiting_funds"
+)
+
+type PayableType string
+
+const (
+	PtChargeback       PayableType = "chargeback"
+	PtRefund           PayableType = "refund"
+	PtChargebackRefund PayableType = "chargeback_refund"
+	PtCredit           PayableType = "credit"
+)
+
 type BankAccountType string
 
 const (
