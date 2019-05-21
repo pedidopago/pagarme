@@ -76,7 +76,7 @@ func TestPut(t *testing.T) {
 	gg, _ := ioutil.ReadAll(t9)
 	t.Log(string(gg))
 	cfg := pagarme.Default(getKeysEnv())
-	//cfg.Trace = true
+	cfg.Trace = true
 	trs := New(cfg)
 	z0, z1, err := trs.Put(tr0)
 	if err != nil {
