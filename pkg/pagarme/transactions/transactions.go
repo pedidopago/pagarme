@@ -98,8 +98,14 @@ type RefundInput struct {
 	// O estorno parcial obedece as mesmas regras de um estorno total, e usa o parâmetro amount como
 	// referência para o valor a ser estornado. É bom observar que o status da transação vai permanecer
 	// paid até que o valor total da transação tenha sido estornado.
-	Amount         int                     `json:"amount,omitempty"`
-	SplitRules     []*pagarme.SplitRule    `json:"split_rules,omitempty"`
+	Amount      int                    `json:"amount,omitempty"`
+	SplitRules  []*pagarme.SplitRule   `json:"split_rules,omitempty"`
+	Async       bool                   `json:"async,omitempty"`
+	Metadata    map[string]interface{} `json:"metadata,omitempty"`
+	BankAccount *BankAccount           `json:"bank_account,omitempty"`
+}
+
+type BankAccount struct {
 	BankAccountID  string                  `json:"bank_account_id,omitempty"`
 	BankCode       string                  `json:"bank_code,omitempty"`
 	Agencia        string                  `json:"agencia,omitempty"`
@@ -108,9 +114,7 @@ type RefundInput struct {
 	ContaDV        string                  `json:"conta_dv,omitempty"`
 	DocumentNumber string                  `json:"document_number,omitempty"`
 	LegalName      string                  `json:"legal_name,omitempty"`
-	Async          bool                    `json:"async,omitempty"`
 	Type           pagarme.BankAccountType `json:"type,omitempty"`
-	Metadata       map[string]interface{}  `json:"metadata,omitempty"`
 }
 
 // Refund refunds a transaction
