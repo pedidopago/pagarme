@@ -75,3 +75,15 @@ type Transaction struct {
 	// addition
 	// discount
 }
+
+type BankAccount struct {
+	BankAccountID  string          `json:"bank_account_id,omitempty"`
+	BankCode       string          `json:"bank_code,omitempty"`
+	Agencia        string          `json:"agencia,omitempty"`
+	AgenciaDV      string          `json:"agencia_dv,omitempty"`
+	Conta          string          `json:"conta,omitempty"`
+	ContaDV        string          `json:"conta_dv,omitempty"`
+	DocumentNumber string          `json:"document_number,omitempty"`
+	LegalName      string          `json:"legal_name,omitempty"`
+	Type           BankAccountType `json:"type,omitempty"`
+}
