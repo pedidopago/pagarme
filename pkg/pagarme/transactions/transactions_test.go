@@ -326,7 +326,7 @@ func TestRefundBoleto(t *testing.T) {
 	//t.Log(z1)
 	z0, z1, err = trs.Refund(z1.ID, &RefundInput{
 		Amount: 4568,
-		BankAccount: &BankAccount{
+		BankAccount: &pagarme.BankAccount{
 			BankCode:       "237",
 			Agencia:        "1234",
 			Conta:          "123123",
