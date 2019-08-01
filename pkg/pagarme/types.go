@@ -37,7 +37,7 @@ type SplitRule struct {
 	Liable              bool          `json:"liable" form:"liable"`
 	ChargeProcessingFee bool          `json:"charge_processing_fee" form:"charge_processing_fee"`
 	Percentage          Float64String `json:"percentage,omitempty" form:"percentage,omitempty"`
-	Amount              Float64String `json:"amount,omitempty" form:"amount,omitempty"`
+	Amount              string        `json:"amount,omitempty" form:"amount,omitempty"`
 	ChargeRemainderFee  bool          `json:"charge_remainder_fee" form:"charge_remainder_fee"`
 	RecipientID         string        `json:"recipient_id" form:"recipient_id"`
 }
