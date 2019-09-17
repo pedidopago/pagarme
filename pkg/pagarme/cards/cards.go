@@ -20,7 +20,7 @@ func New(cfg *pagarme.Config) *API {
 }
 
 // NewCard consume a pagarme API to create a new card and return your informations
-func (api *API) NewCard(cr *pagarme.Card) (*pagarme.Response, *pagarme.Card, error) {
+func (api *API) NewCard(cr *pagarme.NCard) (*pagarme.Response, *pagarme.Card, error) {
 	resp, err := api.Config.Do(http.MethodPost, "/cards", www.JSONReader(cr))
 	if err != nil {
 		return nil, nil, err
