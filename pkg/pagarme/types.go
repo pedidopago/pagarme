@@ -98,6 +98,13 @@ type Card struct {
 	ExpirationDate MMYY      `json:"expiration_date,omitempty" form:"expiration_date,omitempty"`
 }
 
+type NCard struct {
+	CardNumber     string `json:"card_number"`
+	HolderName     string `json:"card_holder_name"`
+	ExpirationDate string `json:"card_expiration_date"`
+	CVV            string `json:"card_cvv"`
+}
+
 type Response struct {
 	Code   ResponseCode `json:"code,omitempty" form:"code,omitempty"`
 	Errors []Perror     `json:"errors,omitempty" form:"errors,omitempty"`
