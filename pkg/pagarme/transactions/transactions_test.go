@@ -417,3 +417,21 @@ func TestPutBoleto(t *testing.T) {
 	}
 	t.Log(z1)
 }
+
+// func TestQuery(t *testing.T) {
+// 	cfg := pagarme.Default("_", "_")
+// 	resp, trs, err := New(cfg).Query(QueryInput{
+// 		Metadata: map[string]string{
+// 			"UUID": "284eefe6-2b75-4b5e-8e79-2096cb424fee",
+// 		},
+// 	})
+// 	if err != nil {
+// 		t.Fatal(err.Error())
+// 	}
+// 	if resp.Code != pagarme.ResponseCodeOk {
+// 		t.Fatal(resp)
+// 	}
+// 	if trs != nil {
+// 		spew.Dump(trs)
+// 	}
+// }
