@@ -2,6 +2,7 @@ package transactions
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
@@ -61,6 +62,48 @@ func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error)
 	result := &pagarme.Transaction{}
 	if err := www.Unmarshal(resp, result); err != nil {
 		api.Config.Logger.Error("could not unmarshal transaction [Get]: " + err.Error())
+		return nil, nil, err
+	}
+
+	return www.Ok(), result, nil
+}
+
+type QueryInput struct {
+	Count    int
+	Page     int
+	Metadata map[string]string
+}
+
+func (qi *QueryInput) Export() url.Values {
+	vv := url.Values{}
+	for k, v := range qi.Metadata {
+		vv.Set("metadata["+k+"]", v)
+	}
+	if qi.Count != 0 {
+		vv.Set("count", strconv.Itoa(qi.Count))
+	} else {
+		vv.Set("count", "10")
+	}
+	if qi.Page != 0 {
+		vv.Set("page", strconv.Itoa(qi.Page))
+	} else {
+		vv.Set("page", "1")
+	}
+	return vv
+}
+
+// Query transactions
+func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transaction, error) {
+	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export().Encode(), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if werr := www.ExtractError(resp); werr != nil {
+		return werr, nil, nil
+	}
+	result := make([]pagarme.Transaction, 0)
+	if err := www.Unmarshal(resp, &result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transactions [Query]: " + err.Error())
 		return nil, nil, err
 	}
 
