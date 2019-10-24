@@ -1,10 +1,10 @@
 package transactions
 
 import (
-	"strings"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
@@ -91,7 +91,7 @@ func (qi *QueryInput) Export() string {
 		vv.Set("page", "1")
 	}
 	vvs := strings.Replace(vv.Encode(), "%5B", "[", -1)
-	vvs = strings.Replace(vvs), "%5D", "]", -1)
+	vvs = strings.Replace(vvs, "%5D", "]", -1)
 	return vvs
 }
 
