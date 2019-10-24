@@ -78,7 +78,7 @@ type QueryInput struct {
 func (qi *QueryInput) Export() string {
 	vv := url.Values{}
 	for k, v := range qi.Metadata {
-		vv.Set("metadata["+k+"]", v)
+		vv.Set("metadata."+k, v)
 	}
 	if qi.Count != 0 {
 		vv.Set("count", strconv.Itoa(qi.Count))
@@ -90,8 +90,7 @@ func (qi *QueryInput) Export() string {
 	} else {
 		vv.Set("page", "1")
 	}
-	vvs := strings.Replace(vv.Encode(), "%5B", "[", -1)
-	vvs = strings.Replace(vvs, "%5D", "]", -1)
+	vvs := strings.Replace(vv.Encode(), "%2E", ".", -1)
 	return vvs
 }
 
