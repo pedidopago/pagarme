@@ -95,6 +95,9 @@ func (qi *QueryInput) Export() url.Values {
 // Query transactions
 func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transaction, error) {
 	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export().Encode(), nil)
+	if api.Config.Trace {
+		api.Config.Logger.Info("/transactions?" + input.Export().Encode())
+	}
 	if err != nil {
 		return nil, nil, err
 	}
