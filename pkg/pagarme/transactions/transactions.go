@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"strings"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -74,7 +75,7 @@ type QueryInput struct {
 	Metadata map[string]string
 }
 
-func (qi *QueryInput) Export() url.Values {
+func (qi *QueryInput) Export() string {
 	vv := url.Values{}
 	for k, v := range qi.Metadata {
 		vv.Set("metadata["+k+"]", v)
@@ -89,14 +90,16 @@ func (qi *QueryInput) Export() url.Values {
 	} else {
 		vv.Set("page", "1")
 	}
-	return vv
+	vvs := strings.Replace(vv.Encode(), "%5B", "[", -1)
+	vvs = strings.Replace(vvs), "%5D", "]", -1)
+	return vvs
 }
 
 // Query transactions
 func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export().Encode(), nil)
+	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export(), nil)
 	if api.Config.Trace {
-		api.Config.Logger.Info("/transactions?" + input.Export().Encode())
+		api.Config.Logger.Info("/transactions?" + input.Export())
 	}
 	if err != nil {
 		return nil, nil, err
