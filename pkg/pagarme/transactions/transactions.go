@@ -92,8 +92,8 @@ func (qi *QueryInput) Export() string {
 		vv.Set("page", "1")
 	}
 	if qi.DateCreatedFrom != 0 && qi.DateCreatedTo != 0 {
-		vv.Set("date_created", ">="+strconv.FormatInt(qi.DateCreatedFrom, 10))
-		vv.Set("date_created", "<="+strconv.FormatInt(qi.DateCreatedTo, 10))
+		vv.Add("date_created", ">="+strconv.FormatInt(qi.DateCreatedFrom, 10))
+		vv.Add("date_created", "<="+strconv.FormatInt(qi.DateCreatedTo, 10))
 	}
 	vvs := vv.Encode() //strings.Replace(vv.Encode(), "%2E", ".", -1)
 	return vvs
