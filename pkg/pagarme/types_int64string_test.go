@@ -12,7 +12,7 @@ func TestMarshalI64(t *testing.T) {
 	}
 }
 
-func TestUnmarshalF64(t *testing.T) {
+func TestUnmarshalI64(t *testing.T) {
 	vv := Int64String(0)
 	v := &vv
 	if err := v.UnmarshalJSON([]byte("\"360\"")); err != nil {

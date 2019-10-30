@@ -72,8 +72,8 @@ type QueryInput struct {
 	Count           int
 	Page            int
 	Metadata        map[string]string
-	DateCreatedFrom int64 // Unix timestamp
-	DateCreatedTo   int64 // Unix timestamp
+	DateCreatedFrom pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
+	DateCreatedTo   pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
 }
 
 func (qi *QueryInput) Export() string {
@@ -92,8 +92,8 @@ func (qi *QueryInput) Export() string {
 		vv.Set("page", "1")
 	}
 	if qi.DateCreatedFrom != 0 && qi.DateCreatedTo != 0 {
-		vv.Add("date_created", ">="+strconv.FormatInt(qi.DateCreatedFrom, 10))
-		vv.Add("date_created", "<="+strconv.FormatInt(qi.DateCreatedTo, 10))
+		vv.Add("date_created", ">="+strconv.FormatInt(int64(qi.DateCreatedFrom), 10))
+		vv.Add("date_created", "<="+strconv.FormatInt(int64(qi.DateCreatedTo), 10))
 	}
 	vvs := vv.Encode() //strings.Replace(vv.Encode(), "%2E", ".", -1)
 	return vvs
