@@ -130,3 +130,9 @@ func (r *Response) String() string {
 	erbuf.WriteString("]")
 	return fmt.Sprintf("code: %v, errors: %v", r.Code, erbuf.String())
 }
+
+type UnixMS int64
+
+func UnixMSFromTime(t time.Time) UnixMS {
+	return UnixMS(t.UnixNano() / 1000000)
+}

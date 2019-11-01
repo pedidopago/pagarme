@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
@@ -70,11 +69,13 @@ func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error)
 }
 
 type QueryInput struct {
-	Count    int
-	Page     int
-	Filter   string
-	Value    string
-	Metadata map[string]string
+	Count           int
+	Page            int
+	Filter          string
+	Value           string
+	Metadata        map[string]string
+	DateCreatedFrom pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
+	DateCreatedTo   pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
 }
 
 func (qi *QueryInput) Export() string {
@@ -95,7 +96,11 @@ func (qi *QueryInput) Export() string {
 	} else {
 		vv.Set("page", "1")
 	}
-	vvs := strings.Replace(vv.Encode(), "%2E", ".", -1)
+	if qi.DateCreatedFrom != 0 && qi.DateCreatedTo != 0 {
+		vv.Add("date_created", ">="+strconv.FormatInt(int64(qi.DateCreatedFrom), 10))
+		vv.Add("date_created", "<="+strconv.FormatInt(int64(qi.DateCreatedTo), 10))
+	}
+	vvs := vv.Encode() //strings.Replace(vv.Encode(), "%2E", ".", -1)
 	return vvs
 }
 
