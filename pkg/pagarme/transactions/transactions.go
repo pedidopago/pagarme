@@ -71,6 +71,8 @@ func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error)
 type QueryInput struct {
 	Count           int
 	Page            int
+	Filter          string
+	Value           string
 	Metadata        map[string]string
 	DateCreatedFrom pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
 	DateCreatedTo   pagarme.UnixMS // Unix timestamp WITH MILLISECONDS
@@ -80,6 +82,9 @@ func (qi *QueryInput) Export() string {
 	vv := url.Values{}
 	for k, v := range qi.Metadata {
 		vv.Set("metadata."+k, v)
+	}
+	if qi.Filter != "" {
+		vv.Set(qi.Filter, qi.Value)
 	}
 	if qi.Count != 0 {
 		vv.Set("count", strconv.Itoa(qi.Count))

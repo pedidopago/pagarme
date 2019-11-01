@@ -76,7 +76,7 @@ func (qi *QueryInput) BulkAnticipationID(v string) *QueryInput {
 func (qi *QueryInput) Status(v pagarme.PayableStatus) *QueryInput {
 	qi.init()
 	qi.b.Add(&pagarme.QueryString{
-		Name: "bulk_anticipation_id",
+		Name: "status",
 		Op:   pagarme.QueryOpEquals,
 		V:    string(v),
 	})
