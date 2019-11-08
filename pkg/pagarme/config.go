@@ -45,7 +45,7 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Passou por aqui")
+	fmt.Println("Passou por aqui - ", c.Apikey)
 	req.SetBasicAuth(c.Apikey, "x")
 	req.Header.Set("X-PagarMe-User-Agent", "github.com/pedidopago/pagarme Dev")
 	req.Header.Set("X-PagarMe-Version", "2017-08-28")
@@ -78,6 +78,7 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	}
 	//
 	if c.Client == nil {
+		fmt.Println("PEGOU DEFATULS")
 		return http.DefaultClient.Do(req)
 	}
 	return c.Client.Do(req)
