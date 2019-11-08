@@ -38,13 +38,16 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 		return werr, nil, nil
 	}
 	result := make([]pagarme.Payable, 0)
+	fmt.Println("TESTE - ", result)
 	//
 	if api.Config.Trace {
+		fmt.Println("AQUI 1")
 		if err := www.UnmarshalTrace(api.Config.Logger, resp, &result); err != nil {
 			api.Config.Logger.Error("could not unmarshal payables: " + err.Error())
 			return nil, nil, err
 		}
 	} else {
+		fmt.Println("AQUI 2")
 		if err := www.Unmarshal(resp, &result); err != nil {
 			api.Config.Logger.Error("could not unmarshal payables [Get]: " + err.Error())
 			return nil, nil, err
