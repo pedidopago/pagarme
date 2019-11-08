@@ -50,5 +50,6 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 			return nil, nil, err
 		}
 	}
+	fmt.Println("DEU BOM - ", result)
 	return www.Ok(), result, nil
 }
