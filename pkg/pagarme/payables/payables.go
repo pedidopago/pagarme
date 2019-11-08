@@ -1,6 +1,7 @@
 package payables
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
@@ -32,6 +33,7 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 	if err != nil {
 		return nil, nil, err
 	}
+	fmt.Println("SUCESSO NO REQUEST")
 	if werr := www.ExtractError(resp); werr != nil {
 		return werr, nil, nil
 	}
