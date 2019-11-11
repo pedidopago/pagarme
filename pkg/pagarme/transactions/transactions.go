@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -106,7 +107,9 @@ func (qi *QueryInput) Export() string {
 
 // Query transactions
 func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transaction, error) {
+	fmt.Println("URL-Part - ", input)
 	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export(), nil)
+	fmt.Println("Passou")
 	if api.Config.Trace {
 		api.Config.Logger.Info("/transactions?" + input.Export())
 	}
