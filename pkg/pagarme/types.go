@@ -60,10 +60,14 @@ type Customer struct {
 // Item TODO: godoc
 type Item struct {
 	ID        string `json:"id,omitempty" form:"id,omitempty"`
+	Object    string `json:"object,omitempty" form:"object,omitempty"`
 	Title     string `json:"title,omitempty" form:"title,omitempty"`
 	UnitPrice int    `json:"unit_price,omitempty" form:"unit_price,omitempty"`
 	Quantity  int    `json:"quantity,omitempty" form:"quantity,omitempty"`
+	Category  string `json:"category,omitempty" form:"category,omitempty"`
 	Tangible  bool   `json:"tangible,omitempty" form:"tangible,omitempty"`
+	Venue     string `json:"venue,omitempty" form:"venue,omitempty"`
+	Date      string `json:"date,omitempty" form:"date,omitempty"`
 }
 
 type Billing struct {
