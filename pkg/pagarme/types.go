@@ -40,6 +40,9 @@ type SplitRule struct {
 	Amount              Int64String   `json:"amount,omitempty" form:"amount,omitempty"`
 	ChargeRemainderFee  bool          `json:"charge_remainder_fee" form:"charge_remainder_fee"`
 	RecipientID         string        `json:"recipient_id" form:"recipient_id"`
+	DateCreated         time.Time     `json:"date_created" form:"date_created"`
+	DateUpdated         time.Time     `json:"date_updated" form:"date_updated"`
+	BlockID             string        `json:"block_id" form:"block_id"`
 }
 
 // Customer TODO: godoc
