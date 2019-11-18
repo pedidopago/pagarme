@@ -1,7 +1,6 @@
 package payables
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
@@ -33,26 +32,21 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println("SUCESSO NO REQUEST")
 	if werr := www.ExtractError(resp); werr != nil {
 		return werr, nil, nil
 	}
 	result := make([]pagarme.Payable, 0)
-	fmt.Println("TESTE - ", result)
 	//
 	if api.Config.Trace {
-		fmt.Println("AQUI 1")
 		if err := www.UnmarshalTrace(api.Config.Logger, resp, &result); err != nil {
 			api.Config.Logger.Error("could not unmarshal payables: " + err.Error())
 			return nil, nil, err
 		}
 	} else {
-		fmt.Println("AQUI 2")
 		if err := www.Unmarshal(resp, &result); err != nil {
 			api.Config.Logger.Error("could not unmarshal payables [Get]: " + err.Error())
 			return nil, nil, err
 		}
 	}
-	fmt.Println("DEU BOM - ", result)
 	return www.Ok(), result, nil
 }
