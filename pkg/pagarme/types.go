@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"time"
+
+	"github.com/gabstv/sqltypes"
 )
 
 // Address TBD
@@ -47,17 +49,17 @@ type SplitRule struct {
 
 // Customer TODO: godoc
 type Customer struct {
-	Object       string       `json:"object,omitempty" form:"object,omitempty"`
-	ID           int64        `json:"id,omitempty" form:"id,omitempty"`
-	ExternalID   string       `json:"external_id,omitempty" form:"external_id,omitempty"`
-	Type         CustomerType `json:"type" form:"type"`
-	Name         string       `json:"name,omitempty" form:"name,omitempty"`
-	Email        string       `json:"email,omitempty" form:"email,omitempty"`
-	Country      CountryCode  `json:"country,omitempty" form:"country,omitempty"`
-	Birthday     YYYYMMDD     `json:"birthday,omitempty" form:"birthday,omitempty"`
-	Gender       string       `json:"gender,omitempty" form:"gender,omitempty"`
-	Documents    []*Document  `json:"documents,omitempty" form:"documents,omitempty"`
-	PhoneNumbers []string     `json:"phone_numbers,omitempty" form:"phone_numbers,omitempty"`
+	Object       string                `json:"object,omitempty" form:"object,omitempty"`
+	ID           int64                 `json:"id,omitempty" form:"id,omitempty"`
+	ExternalID   sqltypes.NullString   `json:"external_id,omitempty" form:"external_id,omitempty"`
+	Type         CustomerType          `json:"type" form:"type"`
+	Name         string                `json:"name,omitempty" form:"name,omitempty"`
+	Email        string                `json:"email,omitempty" form:"email,omitempty"`
+	Country      CountryCode           `json:"country,omitempty" form:"country,omitempty"`
+	Birthday     YYYYMMDD              `json:"birthday,omitempty" form:"birthday,omitempty"`
+	Gender       string                `json:"gender,omitempty" form:"gender,omitempty"`
+	Documents    []*Document           `json:"documents,omitempty" form:"documents,omitempty"`
+	PhoneNumbers []sqltypes.NullString `json:"phone_numbers,omitempty" form:"phone_numbers,omitempty"`
 }
 
 // Item TODO: godoc

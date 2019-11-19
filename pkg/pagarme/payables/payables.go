@@ -27,7 +27,6 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 	if input != nil {
 		urlpart += "?" + input.Build()
 	}
-	println(urlpart)
 	resp, err := api.Config.Do(http.MethodGet, urlpart, nil)
 	if err != nil {
 		return nil, nil, err
