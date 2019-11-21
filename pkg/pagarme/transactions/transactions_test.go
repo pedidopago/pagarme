@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gabstv/sqltypes"
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
 )
@@ -45,7 +44,7 @@ func TestPut(t *testing.T) {
 			Country:    pagarme.Brazil,
 			Type:       pagarme.CustomerIndividual,
 			Email:      "john.smith@gmail.com",
-			PhoneNumbers: []sqltypes.NullString{
+			PhoneNumbers: []string{
 				"+5511900000000",
 			},
 			Documents: []*pagarme.Document{
@@ -117,7 +116,7 @@ func TestPutRefuse(t *testing.T) {
 			Country:    pagarme.Brazil,
 			Type:       pagarme.CustomerIndividual,
 			Email:      "john.smith@gmail.com",
-			PhoneNumbers: []sqltypes.NullString{
+			PhoneNumbers: []string{
 				"+5511900000000",
 			},
 			Documents: []*pagarme.Document{
@@ -189,7 +188,7 @@ func TestRefundCard(t *testing.T) {
 			Country:    pagarme.Brazil,
 			Type:       pagarme.CustomerIndividual,
 			Email:      "john.smith@gmail.com",
-			PhoneNumbers: []sqltypes.NullString{
+			PhoneNumbers: []string{
 				"+5511900000000",
 			},
 			Documents: []*pagarme.Document{
@@ -271,7 +270,7 @@ func TestRefundBoleto(t *testing.T) {
 			Country:    pagarme.Brazil,
 			Type:       pagarme.CustomerIndividual,
 			Email:      "john.smith@gmail.com",
-			PhoneNumbers: []sqltypes.NullString{
+			PhoneNumbers: []string{
 				"+5511900000000",
 			},
 			Documents: []*pagarme.Document{
@@ -362,7 +361,7 @@ func TestPutBoleto(t *testing.T) {
 		Amount:               15669, // R$ 156.69
 		CardHolderName:       "John Smith",
 		PaymentMethod:        pagarme.PaymentBoleto,
-		BoletoExpirationDate: sqltypes.NullString(time.Now().AddDate(0, 0, 2).Format("2006-01-02")),
+		BoletoExpirationDate: time.Now().AddDate(0, 0, 2).Format("2006-01-02"),
 		BoletoInstructions:   "test billet please ignore",
 		Async:                false,
 		Installments:         1,
@@ -374,7 +373,7 @@ func TestPutBoleto(t *testing.T) {
 			Country:    pagarme.Brazil,
 			Type:       pagarme.CustomerIndividual,
 			Email:      "john.smith@gmail.com",
-			PhoneNumbers: []sqltypes.NullString{
+			PhoneNumbers: []string{
 				"+5511900000000",
 			},
 			Documents: []*pagarme.Document{
