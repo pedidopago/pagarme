@@ -53,7 +53,7 @@ type Customer struct {
 	Type         CustomerType `json:"type" form:"type"`
 	Name         string       `json:"name,omitempty" form:"name,omitempty"`
 	Email        string       `json:"email,omitempty" form:"email,omitempty"`
-	Country      string       `json:"country,omitempty" form:"country,omitempty"`
+	Country      CountryCode  `json:"country,omitempty" form:"country,omitempty"`
 	Birthday     YYYYMMDD     `json:"birthday,omitempty" form:"birthday,omitempty"`
 	Gender       string       `json:"gender,omitempty" form:"gender,omitempty"`
 	Documents    []*Document  `json:"documents,omitempty" form:"documents,omitempty"`
