@@ -152,7 +152,7 @@ func (qi *QueryInput) Count(v int) *QueryInput {
 // Page -> Parâmetro de paginação: aplica um offset de page * count nos resultados
 func (qi *QueryInput) Page(v int) *QueryInput {
 	qi.init()
-	qi.b.Add(&pagarme.QueryInt{
+	qi.b.Set(&pagarme.QueryInt{
 		Name: "page",
 		Op:   pagarme.QueryOpEquals,
 		V:    v,

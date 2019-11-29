@@ -26,6 +26,7 @@ const (
 
 type Querier interface {
 	Format() string
+	PName() string
 }
 
 // QueryTime is used on datetime queries
@@ -40,6 +41,11 @@ func (qt *QueryTime) Format() string {
 	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.T.UnixNano()/1000000)
 }
 
+// PName of the query param
+func (qt *QueryTime) PName() string {
+	return qt.Name
+}
+
 // QueryInt is used on integer queries
 type QueryInt struct {
 	Name string
@@ -52,6 +58,11 @@ func (qt *QueryInt) Format() string {
 	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.V)
 }
 
+// PName of the query param
+func (qt *QueryInt) PName() string {
+	return qt.Name
+}
+
 // QueryString is used on string queries
 type QueryString struct {
 	Name string
@@ -62,6 +73,11 @@ type QueryString struct {
 // Format to pagarme query
 func (qt *QueryString) Format() string {
 	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.V)
+}
+
+// PName of the query param
+func (qt *QueryString) PName() string {
+	return qt.Name
 }
 
 type QueryBuilder struct {
@@ -77,6 +93,27 @@ func (b *QueryBuilder) Add(q Querier) {
 		b.items = make([]Querier, 0)
 	}
 	b.items = append(b.items, q)
+}
+
+// Set a querier item
+func (b *QueryBuilder) Set(q Querier) {
+	b.lock.Lock()
+	defer b.lock.Unlock()
+	if b.items == nil {
+		b.items = make([]Querier, 0)
+	}
+	z := -1
+	for i := range b.items {
+		if b.items[i].PName() == q.PName() {
+			z = i
+			break
+		}
+	}
+	if z == -1 {
+		b.items = append(b.items, q)
+		return
+	}
+	b.items[z] = q
 }
 
 // Build the query
