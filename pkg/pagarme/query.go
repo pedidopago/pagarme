@@ -116,6 +116,21 @@ func (b *QueryBuilder) Set(q Querier) {
 	b.items[z] = q
 }
 
+// Get a querier item
+func (b *QueryBuilder) Get(name string) Querier {
+	b.lock.Lock()
+	defer b.lock.Unlock()
+	if b.items == nil {
+		return nil
+	}
+	for i := range b.items {
+		if b.items[i].PName() == name {
+			return b.items[i]
+		}
+	}
+	return nil
+}
+
 // Build the query
 func (b *QueryBuilder) Build() string {
 	b.lock.Lock()

@@ -141,12 +141,25 @@ func (qi *QueryInput) ID(v string) *QueryInput {
 // Count -> Parâmetro de quantos resultados devem ser retornados
 func (qi *QueryInput) Count(v int) *QueryInput {
 	qi.init()
-	qi.b.Add(&pagarme.QueryInt{
+	qi.b.Set(&pagarme.QueryInt{
 		Name: "count",
 		Op:   pagarme.QueryOpEquals,
 		V:    v,
 	})
 	return qi
+}
+
+// GetCount -> retorna quantos resultados devem ser retornados
+func (qi *QueryInput) GetCount() int {
+	qi.init()
+	qiface := qi.b.Get("count")
+	if qiface == nil {
+		return 0
+	}
+	if q, ok := qiface.(*pagarme.QueryInt); ok {
+		return q.V
+	}
+	return 0
 }
 
 // Page -> Parâmetro de paginação: aplica um offset de page * count nos resultados
