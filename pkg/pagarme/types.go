@@ -40,6 +40,9 @@ type SplitRule struct {
 	Amount              Int64String   `json:"amount,omitempty" form:"amount,omitempty"`
 	ChargeRemainderFee  bool          `json:"charge_remainder_fee" form:"charge_remainder_fee"`
 	RecipientID         string        `json:"recipient_id" form:"recipient_id"`
+	DateCreated         time.Time     `json:"date_created" form:"date_created"`
+	DateUpdated         time.Time     `json:"date_updated" form:"date_updated"`
+	BlockID             string        `json:"block_id" form:"block_id"`
 }
 
 // Customer TODO: godoc
@@ -60,10 +63,14 @@ type Customer struct {
 // Item TODO: godoc
 type Item struct {
 	ID        string `json:"id,omitempty" form:"id,omitempty"`
+	Object    string `json:"object,omitempty" form:"object,omitempty"`
 	Title     string `json:"title,omitempty" form:"title,omitempty"`
 	UnitPrice int    `json:"unit_price,omitempty" form:"unit_price,omitempty"`
 	Quantity  int    `json:"quantity,omitempty" form:"quantity,omitempty"`
+	Category  string `json:"category,omitempty" form:"category,omitempty"`
 	Tangible  bool   `json:"tangible,omitempty" form:"tangible,omitempty"`
+	Venue     string `json:"venue,omitempty" form:"venue,omitempty"`
+	Date      string `json:"date,omitempty" form:"date,omitempty"`
 }
 
 type Billing struct {
