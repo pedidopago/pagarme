@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -81,7 +82,8 @@ type QueryInput struct {
 func (qi *QueryInput) Export() string {
 	vv := url.Values{}
 	for k, v := range qi.Metadata {
-		vv.Set("metadata."+k, v)
+		fmt.Println("K", k, "V", v)
+		vv.Set("metadata["+k+"]", v)
 	}
 	if qi.Filter != "" {
 		vv.Set(qi.Filter, qi.Value)
