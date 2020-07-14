@@ -22,7 +22,7 @@ func New(cfg *pagarme.Config) *API {
 
 // NewRecipient consume a pagarme API to create a new recipient and return your informations
 func (api *API) NewRecipient(recipient *pagarme.CreateRecipient) (*pagarme.Response, *pagarme.Recipient, error) {
-	fmt.Println("Chegou aqui - ", www.JSONReader(recipient))
+	fmt.Println("Chegou aqui - ", recipient)
 	resp, err := api.Config.Do(http.MethodPost, "/recipients", www.JSONReader(recipient))
 	if err != nil {
 		return nil, nil, err
