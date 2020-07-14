@@ -4,16 +4,16 @@ import "time"
 
 // CreateRecipient struct
 type CreateRecipient struct {
-	TransferEnable                string
-	TransferInterval              string
-	TransferDay                   string
-	AutomaticAnticipationEnabled  bool `json:"automatic_anticipation_enabled"`
-	AnticipatableVolumePercentage int  `json:"anticipatable_volume_percentage"`
-	BankAccountID                 string
-	BankAcc                       BankAccountRecipient
-	PostbackURL                   string
-	RegisterInfo                  RegisterInformation
-	Metadata                      interface{}
+	TransferEnable                string               `json:"transfer_enable"`
+	TransferInterval              string               `json:"transfer_interval"`
+	TransferDay                   string               `json:"transfer_day"`
+	AutomaticAnticipationEnabled  bool                 `json:"automatic_anticipation_enabled"`
+	AnticipatableVolumePercentage int                  `json:"anticipatable_volume_percentage"`
+	BankAccountID                 string               `json:"bank_account_id"`
+	BankAcc                       BankAccountRecipient `json:"bank_account"`
+	PostbackURL                   string               `json:"postback_url"`
+	RegisterInfo                  RegisterInformation  `json:"register_information"`
+	Metadata                      interface{}          `json:"metadata"`
 }
 
 // Recipient structure to define recipient
