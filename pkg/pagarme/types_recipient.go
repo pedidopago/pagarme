@@ -58,7 +58,7 @@ type RegisterInformation struct {
 	CompanyName    string           `json:"company_name"`
 	Email          string           `json:"email"`
 	SiteURL        string           `json:"site_url"`
-	PhoneNum       PhoneNumbers     `json:"phone_numbers"`
+	PhoneNum       []PhoneNumbers   `json:"phone_numbers"`
 	ManagingPart   ManagingPartners `json:"managing_partners"`
 }
 
