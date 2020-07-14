@@ -10,9 +10,9 @@ type CreateRecipient struct {
 	AutomaticAnticipationEnabled  bool `json:"automatic_anticipation_enabled"`
 	AnticipatableVolumePercentage int  `json:"anticipatable_volume_percentage"`
 	BankAccountID                 string
-	BankAcc                       BankAccount
+	BankAcc                       *BankAccount
 	PostbackURL                   string
-	RegisterInfo                  RegisterInformation
+	RegisterInfo                  *RegisterInformation
 	Metadata                      interface{}
 }
 
