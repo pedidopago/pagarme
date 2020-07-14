@@ -53,20 +53,26 @@ type BankAccountRecipient struct {
 
 // RegisterInformation struct
 type RegisterInformation struct {
+	Type           string           `json:"type"`
+	DocumentNumber string           `json:"document_number"`
+	CompanyName    string           `json:"company_name"`
+	Email          string           `json:"email"`
+	SiteURL        string           `json:"site_url"`
+	PhoneNum       PhoneNumbers     `json:"phone_numbers"`
+	ManagingPart   ManagingPartners `json:"managing_partners"`
+}
+
+// PhoneNumbers struct
+type PhoneNumbers struct {
+	Ddd    string `json:"ddd"`
+	Number string `json:"number"`
+	Type   string `json:"type"`
+}
+
+// ManagingPartners struct
+type ManagingPartners struct {
 	Type           string `json:"type"`
 	DocumentNumber string `json:"document_number"`
-	CompanyName    string `json:"company_name"`
 	Email          string `json:"email"`
-	SiteURL        string `json:"site_url"`
-	PhoneNumbers   []struct {
-		Ddd    string `json:"ddd"`
-		Number string `json:"number"`
-		Type   string `json:"type"`
-	} `json:"phone_numbers"`
-	ManagingPartners []struct {
-		Type           string `json:"type"`
-		DocumentNumber string `json:"document_number"`
-		Email          string `json:"email"`
-		Name           string `json:"name"`
-	} `json:"managing_partners"`
+	Name           string `json:"name"`
 }
