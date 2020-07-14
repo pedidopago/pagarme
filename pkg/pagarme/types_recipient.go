@@ -9,7 +9,6 @@ type CreateRecipient struct {
 	TransferDay                   string               `json:"transfer_day"`
 	AutomaticAnticipationEnabled  bool                 `json:"automatic_anticipation_enabled"`
 	AnticipatableVolumePercentage int                  `json:"anticipatable_volume_percentage"`
-	BankAccountID                 string               `json:"bank_account_id"`
 	BankAcc                       BankAccountRecipient `json:"bank_account"`
 	PostbackURL                   string               `json:"postback_url"`
 	RegisterInfo                  RegisterInformation  `json:"register_information"`
