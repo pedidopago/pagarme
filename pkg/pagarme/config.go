@@ -74,7 +74,6 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 		}
 		fmt.Println(buf.String())
 	}
-	fmt.Println("e aqui - ", req.Body)
 	//
 	if c.Client == nil {
 		return http.DefaultClient.Do(req)
