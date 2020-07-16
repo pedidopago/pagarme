@@ -2,6 +2,7 @@ package recipients
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
@@ -9,8 +10,8 @@ import (
 )
 
 func getKeysEnv() (apikey, cryptokey string) {
-	apikey = "ak_test_A3IAVkvZxOyoQ87ITAHql599df9BsO"
-	cryptokey = "ek_test_FasuETbhBjx0K3QD3ryyGPI8XLCP3e"
+	apikey = os.Getenv("PME_API_KEY")
+	cryptokey = os.Getenv("PME_CRYPTO_KEY")
 	return
 }
 
