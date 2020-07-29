@@ -32,12 +32,12 @@ func (api *API) NewBankAccount(bankAccount *pagarme.BankAccount) (*pagarme.Respo
 
 	if api.Config.Trace {
 		if err := www.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+			api.Config.Logger.Error("could not unmarshal bank accounts: " + err.Error())
 			return nil, nil, err
 		}
 	} else {
 		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
+			api.Config.Logger.Error("could not unmarshal bank account [NewBankAccount]: " + err.Error())
 			return nil, nil, err
 		}
 	}
