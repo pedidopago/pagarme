@@ -77,6 +77,7 @@ type Transaction struct {
 }
 
 type BankAccount struct {
+	ID             int32           `json:"id,omitempty"`
 	BankAccountID  string          `json:"bank_account_id,omitempty"`
 	BankCode       string          `json:"bank_code,omitempty"`
 	Agencia        string          `json:"agencia,omitempty"`

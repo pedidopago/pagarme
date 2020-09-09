@@ -4,7 +4,7 @@ import "time"
 
 // CreateRecipient struct
 type CreateRecipient struct {
-	TransferEnable                string               `json:"transfer_enable,omitempty"`
+	TransferEnabled               bool                 `json:"transfer_enabled,omitempty"`
 	TransferInterval              string               `json:"transfer_interval,omitempty"`
 	TransferDay                   string               `json:"transfer_day,omitempty"`
 	AutomaticAnticipationEnabled  bool                 `json:"automatic_anticipation_enabled,omitempty"`
