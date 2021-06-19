@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -416,6 +417,16 @@ func TestPutBoleto(t *testing.T) {
 		t.Fatal(z0.String())
 	}
 	t.Log(z1)
+}
+
+func TestGetCardHash(t *testing.T) {
+	cfg := pagarme.Default(getKeysEnv())
+	trs := New(cfg)
+	z0, z1, err := trs.CardHashKey()
+	require.NoError(t, err)
+	require.Equal(t, pagarme.ResponseCodeOk, z0.Code)
+	require.NotEmpty(t, z1)
+	t.Logf("%+v", z1)
 }
 
 // func TestQuery(t *testing.T) {

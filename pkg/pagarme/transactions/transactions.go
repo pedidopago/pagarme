@@ -192,3 +192,24 @@ func (api *API) Refund(id int64, input *RefundInput) (*pagarme.Response, *pagarm
 	}
 	return www.Ok(), result, nil
 }
+
+// CardHashKey generates a new key to encrypt card_hash
+//
+// GET https://api.pagar.me/1/transactions/card_hash_key
+func (api *API) CardHashKey() (response *pagarme.Response, cardHash *pagarme.CardHash, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/card_hash_key", nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.CardHash)
+	if rerr = www.Unmarshal(resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal card hash key [Get]: " + rerr.Error())
+		return
+	}
+	cardHash = result
+	response = www.Ok()
+	return
+}

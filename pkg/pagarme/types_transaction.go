@@ -88,3 +88,10 @@ type BankAccount struct {
 	LegalName      string          `json:"legal_name,omitempty"`
 	Type           BankAccountType `json:"type,omitempty"`
 }
+
+type CardHash struct {
+	ID          int64      `json:"id,omitempty" form:"id,omitempty"`
+	PublicKey   string     `json:"public_key,omitempty" form:"public_key,omitempty"`
+	IP          string     `json:"ip,omitempty" form:"ip,omitempty"`
+	DateCreated *time.Time `json:"date_created,omitempty" form:"date_created,omitempty"`
+}
