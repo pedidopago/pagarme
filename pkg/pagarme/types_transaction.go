@@ -101,6 +101,6 @@ type CardHash struct {
 type CardHashData struct {
 	CardNumber         string `json:"card_number,omitempty" form:"card_number,omitempty"`
 	CardHolderName     string `json:"card_holder_name,omitempty" form:"card_holder_name,omitempty"`
-	CardExpirationDate string `json:"card_expiration_date,omitempty" form:"card_expiration_date,omitempty"`
+	CardExpirationDate MMYY   `json:"card_expiration_date,omitempty" form:"card_expiration_date,omitempty"`
 	CardCvv            string `json:"card_cvv,omitempty" form:"card_cvv,omitempty"`
 }
