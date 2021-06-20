@@ -89,9 +89,18 @@ type BankAccount struct {
 	Type           BankAccountType `json:"type,omitempty"`
 }
 
+// CardHash wraps the response from new card hash public key request
 type CardHash struct {
 	ID          int64      `json:"id,omitempty" form:"id,omitempty"`
 	PublicKey   string     `json:"public_key,omitempty" form:"public_key,omitempty"`
 	IP          string     `json:"ip,omitempty" form:"ip,omitempty"`
 	DateCreated *time.Time `json:"date_created,omitempty" form:"date_created,omitempty"`
+}
+
+// CardHashData contains the fields used to generate a card_hash
+type CardHashData struct {
+	CardNumber         string `json:"card_number,omitempty" form:"card_number,omitempty"`
+	CardHolderName     string `json:"card_holder_name,omitempty" form:"card_holder_name,omitempty"`
+	CardExpirationDate string `json:"card_expiration_date,omitempty" form:"card_expiration_date,omitempty"`
+	CardCvv            string `json:"card_cvv,omitempty" form:"card_cvv,omitempty"`
 }
