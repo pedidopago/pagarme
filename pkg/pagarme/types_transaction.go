@@ -20,6 +20,7 @@ type Transaction struct {
 	SoftDescriptor       string                 `json:"soft_descriptor,omitempty" form:"soft_descriptor,omitempty"`
 	Capture              string                 `json:"capture,omitempty" form:"capture,omitempty"`
 	BoletoInstructions   string                 `json:"boleto_instructions,omitempty" form:"boleto_instructions,omitempty"`
+	PixExpirationDate    string                 `json:"pix_expiration_date,omitempty" form:"pix_expiration_date,omitempty"`
 	SplitRules           []*SplitRule           `json:"split_rules,omitempty" form:"split_rules,omitempty"`
 	Customer             *Customer              `json:"customer" form:"customer"`
 	Billing              *Billing               `json:"billing" form:"billing"`
@@ -54,6 +55,7 @@ type Transaction struct {
 	Card                 *Card      `json:"card,omitempty" form:"card,omitempty"`
 	CaptureMethod        string     `json:"capture_method,omitempty" form:"capture_method,omitempty"`
 	CardPinMode          string     `json:"card_pin_mode,omitempty" form:"card_pin_mode,omitempty"`
+	PixQrCode            string     `json:"pix_qr_code,omitempty" form:"pix_qr_code,omitempty"`
 	// card_magstripe_fallback
 	AntifraudScore float64 `json:"antifraud_score,omitempty" form:"antifraud_score,omitempty"`
 	BoletoURL      string  `json:"boleto_url,omitempty" form:"boleto_url,omitempty"`
