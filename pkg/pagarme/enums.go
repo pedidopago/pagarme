@@ -20,6 +20,7 @@ type PaymentMethod string
 const (
 	PaymentCreditCard PaymentMethod = "credit_card"
 	PaymentBoleto     PaymentMethod = "boleto"
+	PaymentPix        PaymentMethod = "pix"
 )
 
 type ResponseCode int
