@@ -28,6 +28,7 @@ type Transaction struct {
 	Metadata             map[string]interface{} `json:"metadata,omitempty" form:"metadata,omitempty"`
 	Session              string                 `json:"session,omitempty" form:"session,omitempty"`
 	LocalTime            *time.Time             `json:"local_time,omitempty" form:"local_time,omitempty"`
+	ReferenceKey         string                 `json:"reference_key,omitempty" form:"reference_key,omitempty"`
 	//
 	// Data returned by pagar-me
 	//
@@ -64,7 +65,6 @@ type Transaction struct {
 	// phone
 	// address
 	AntifraudMetadata map[string]interface{} `json:"antifraud_metadata,omitempty" form:"antifraud_metadata,omitempty"`
-	// reference_key
 	// device
 	// local_transaction_id
 	// fraud_covered
