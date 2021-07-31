@@ -213,3 +213,24 @@ func (api *API) CardHashKey() (response *pagarme.Response, cardHash *pagarme.Car
 	response = www.Ok()
 	return
 }
+
+// Payables retrieves all payables for a transaction
+//
+// GET https://api.pagar.me/1/transactions/id/payables
+func (api *API) Payables(tid string) (response *pagarme.Response, payables []pagarme.Payable, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/"+tid+"/payables", nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := make([]pagarme.Payable, 0)
+	if rerr = www.Unmarshal(resp, &result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal transaction payables [Get]: " + rerr.Error())
+		return
+	}
+	payables = result
+	response = www.Ok()
+	return
+}
