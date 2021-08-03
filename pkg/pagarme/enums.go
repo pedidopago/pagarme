@@ -71,3 +71,27 @@ const (
 	BnkAccContaCorrenteConjunta BankAccountType = "conta_corrente_conjunta"
 	BnkAccContaPoupancaConjunta BankAccountType = "conta_poupanca_conjunta"
 )
+
+type AnticipationStatus string
+
+const (
+	AntStatusBuilding AnticipationStatus = "building"
+	AntStatusPending  AnticipationStatus = "pending"
+	AntStatusApproved AnticipationStatus = "approved"
+	AntStatusRefused  AnticipationStatus = "refused"
+	AntStatusCanceled AnticipationStatus = "canceled"
+)
+
+type AnticipationTimeframe string
+
+const (
+	AntTimeframeStart AnticipationTimeframe = "start"
+	AntTimeframeEnd   AnticipationTimeframe = "end"
+)
+
+type AnticipationType string
+
+const (
+	AntTypeSpot      AnticipationType = "spot"
+	// TODO: automatic type
+)
