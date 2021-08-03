@@ -27,7 +27,7 @@ func TestPut(t *testing.T) {
 		LegalName:      "API BANK ACCOUNT",
 	}
 	tr0 := &pagarme.CreateRecipient{
-		TransferEnable:                "true",
+		TransferEnabled:               true,
 		TransferDay:                   "0",
 		TransferInterval:              "daily",
 		AutomaticAnticipationEnabled:  true,
