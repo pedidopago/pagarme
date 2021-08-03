@@ -74,11 +74,11 @@ const (
 type AnticipationStatus string
 
 const (
-	AntBuilding AnticipationStatus = "building"
-	AntPending  AnticipationStatus = "pending"
-	AntApproved AnticipationStatus = "approved"
-	AntRefused  AnticipationStatus = "refused"
-	AntCanceled AnticipationStatus = "canceled"
+	AntStatusBuilding AnticipationStatus = "building"
+	AntStatusPending  AnticipationStatus = "pending"
+	AntStatusApproved AnticipationStatus = "approved"
+	AntStatusRefused  AnticipationStatus = "refused"
+	AntStatusCanceled AnticipationStatus = "canceled"
 )
 
 type AnticipationTimeframe string
@@ -86,4 +86,11 @@ type AnticipationTimeframe string
 const (
 	AntTimeframeStart AnticipationTimeframe = "start"
 	AntTimeframeEnd   AnticipationTimeframe = "end"
+)
+
+type AnticipationType string
+
+const (
+	AntTypeSpot      AnticipationType = "spot"
+	// TODO: automatic type
 )

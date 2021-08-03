@@ -22,11 +22,15 @@ type Limits struct {
 }
 
 type Anticipation struct {
+	Object          string                `json:"object,omitempty"`
 	ID              string                `json:"id,omitempty"`
 	Status          AnticipationStatus    `json:"status,omitempty"`
-	Timeframe       AnticipationTimeframe `json:"timeframe,omitempty"`
-	PaymentDate     time.Time             `json:"payment_date,omitempty"`
 	Amount          int                   `json:"amount,omitempty"`
 	Fee             int                   `json:"fee,omitempty"`
 	AnticipationFee int                   `json:"anticipation_fee,omitempty"`
+	Type            AnticipationType      `json:"type,omitempty"`
+	Timeframe       AnticipationTimeframe `json:"timeframe,omitempty"`
+	PaymentDate     time.Time             `json:"payment_date,omitempty"`
+	DateCreated     time.Time             `json:"date_created,omitempty"`
+	DateUpdated     time.Time             `json:"date_updated,omitempty"`
 }
