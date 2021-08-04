@@ -179,6 +179,22 @@ func (in *QueryInput) Export() string {
 	return vv.Encode()
 }
 
+// Delete
+//
+// DELETE https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/bulk_anticipation_id
+func (api *API) Delete(bulkAnticipationId string) (response *pagarme.Response, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodDelete, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s", api.RecipientID, bulkAnticipationId), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+
+	response = www.Ok()
+	return
+}
+
 // Query
 //
 // GET https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/
