@@ -30,6 +30,7 @@ func Test_GetLimits_Build_Confirm_Cancel_Anticipation(t *testing.T) {
 	cfg := pagarme.Default(getKeysEnv())
 	ant := New(cfg, os.Getenv("PME_RECIPIENT_ID"))
 
+	// TODO: make sure we get a working day
 	payday := time.Now().AddDate(0, 0, 2).UnixNano() / int64(time.Millisecond)
 	tf := pagarme.AntTimeframeStart
 
@@ -79,6 +80,7 @@ func Test_GetLimits_Build_Delete_Anticipation(t *testing.T) {
 	cfg := pagarme.Default(getKeysEnv())
 	ant := New(cfg, os.Getenv("PME_RECIPIENT_ID"))
 
+	// TODO: make sure we get a working day
 	payday := time.Now().AddDate(0, 0, 2).UnixNano() / int64(time.Millisecond)
 	tf := pagarme.AntTimeframeStart
 
