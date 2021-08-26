@@ -49,3 +49,35 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 	}
 	return www.Ok(), result, nil
 }
+
+
+// Get retrieves a payable by id
+//
+// GET https://api.pagar.me/1/payables/payable_id
+func (api *API) Get(id string) (response *pagarme.Response,  payable *pagarme.Payable, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, "/payables/" + id, nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Payable)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal payable: " + rerr.Error())
+			return
+		} else {
+			if rerr = www.Unmarshal(resp, result); rerr != nil {
+				api.Config.Logger.Error("could not unmarshal payable: [GetPayable]" + rerr.Error())
+				return
+			}
+		}
+	}
+
+	payable = result
+	response = www.Ok()
+	return
+}
+
