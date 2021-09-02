@@ -1,6 +1,7 @@
 package recipients
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/pedidopago/pagarme/internal/pkg/www"
@@ -42,4 +43,31 @@ func (api *API) NewRecipient(recipient *pagarme.CreateRecipient) (*pagarme.Respo
 		}
 	}
 	return www.Ok(), result, nil
+}
+
+func (api *API) GetRecipient(id string) (response *pagarme.Response, recipient *pagarme.Recipient, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s", id), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Recipient)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal recipient: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal recipient: [GetRecipient]" + rerr.Error())
+			return
+		}
+	}
+
+	recipient = result
+	response = www.Ok()
+	return
 }
