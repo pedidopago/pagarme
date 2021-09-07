@@ -95,3 +95,21 @@ const (
 	AntTypeSpot      AnticipationType = "spot"
 	// TODO: automatic type
 )
+
+type TransferType string
+
+const (
+	TransferTypeTed            TransferType = "ted"
+	TransferTypeDoc            TransferType = "doc"
+	TransferTypeCreditoEmConta TransferType = "credito_em_conta"
+)
+
+type TransferStatus string
+
+const (
+	TransferStatusPending     TransferStatus = "pending_transfer"
+	TransferStatusTransferred TransferStatus = "transferred"
+	TransferStatusFailed      TransferStatus = "failed"
+	TransferStatusProcessing  TransferStatus = "processing"
+	TransferStatusCanceled    TransferStatus = "canceled"
+)

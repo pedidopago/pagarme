@@ -79,16 +79,20 @@ type Transaction struct {
 }
 
 type BankAccount struct {
-	ID             int32           `json:"id,omitempty"`
-	BankAccountID  string          `json:"bank_account_id,omitempty"`
-	BankCode       string          `json:"bank_code,omitempty"`
-	Agencia        string          `json:"agencia,omitempty"`
-	AgenciaDV      string          `json:"agencia_dv,omitempty"`
-	Conta          string          `json:"conta,omitempty"`
-	ContaDV        string          `json:"conta_dv,omitempty"`
-	DocumentNumber string          `json:"document_number,omitempty"`
-	LegalName      string          `json:"legal_name,omitempty"`
-	Type           BankAccountType `json:"type,omitempty"`
+	ID                 int32           `json:"id,omitempty"`
+	BankAccountID      string          `json:"bank_account_id,omitempty"`
+	BankCode           string          `json:"bank_code,omitempty"`
+	Agencia            string          `json:"agencia,omitempty"`
+	AgenciaDV          string          `json:"agencia_dv,omitempty"`
+	Conta              string          `json:"conta,omitempty"`
+	ContaDV            string          `json:"conta_dv,omitempty"`
+	DocumentType       DocumentType    `json:"document_type,omitempty"`
+	DocumentNumber     string          `json:"document_number,omitempty"`
+	LegalName          string          `json:"legal_name,omitempty"`
+	Type               BankAccountType `json:"type,omitempty"`
+	ChargeTransferFees bool            `json:"charge_transfer_fees"`
+	PixKey             string          `json:"pix_key,omitempty"`
+	DateCreated        time.Time       `json:"date_created,omitempty"`
 }
 
 // CardHash wraps the response from new card hash public key request
