@@ -146,7 +146,7 @@ func (api *API) CancelPendingAnticipation(bulkAnticipationId string) (response *
 		}
 	} else {
 		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: [ConfirmNewAnticipation]" + rerr.Error())
+			api.Config.Logger.Error("could not unmarshal anticipation: [CancelPendingAnticipation]" + rerr.Error())
 			return
 		}
 	}
@@ -215,7 +215,7 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, anticipatio
 		}
 	} else {
 		if rerr = www.Unmarshal(resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal limits: [GetLimits]" + rerr.Error())
+			api.Config.Logger.Error("could not unmarshal anticipations: [Query]" + rerr.Error())
 			return
 		}
 	}
