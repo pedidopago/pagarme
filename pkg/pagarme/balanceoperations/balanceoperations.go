@@ -72,10 +72,10 @@ func (in *QueryInput) Export() string {
 		vv.Set("status", string(*in.Status))
 	}
 	if in.StartDate != nil {
-		vv.Set("start_date", strconv.FormatInt(in.StartDate.Unix(), 10))
+		vv.Set("start_date", strconv.FormatInt(in.StartDate.Unix() * 1000, 10))
 	}
 	if in.EndDate != nil {
-		vv.Set("end_date", strconv.FormatInt(in.StartDate.Unix(), 10))
+		vv.Set("end_date", strconv.FormatInt(in.StartDate.Unix() * 1000, 10))
 	}
 	for k, v := range in.Extra {
 		vv.Set(k, v)
