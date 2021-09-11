@@ -5,7 +5,7 @@ import "time"
 type BalanceOperation struct {
 	Object           string                 `json:"object"`
 	Id               int                    `json:"id"`
-	Status           string                 `json:"status"`
+	Status           BalanceOperationStatus `json:"status"`
 	BalanceAmount    int                    `json:"balance_amount"`
 	BalanceOldAmount int                    `json:"balance_old_amount"`
 	Type             string                 `json:"type"`

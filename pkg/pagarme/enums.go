@@ -113,3 +113,11 @@ const (
 	TransferStatusProcessing  TransferStatus = "processing"
 	TransferStatusCanceled    TransferStatus = "canceled"
 )
+
+type BalanceOperationStatus string
+
+const (
+	BalOpStatusWaitingFunds = "waiting_funds"
+	BalOpStatusAvailable    = "available"
+	BalOpStatusTransferred  = "transferred"
+)
