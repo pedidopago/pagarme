@@ -36,11 +36,11 @@ func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.B
 		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
 			api.Config.Logger.Error("could not unmarshal balance operations: " + rerr.Error())
 			return
-		} else {
-			if rerr = www.Unmarshal(resp, result); rerr != nil {
-				api.Config.Logger.Error("could not unmarshal balance operations: [Get]" + rerr.Error())
-				return
-			}
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal balance operations: [Get]" + rerr.Error())
+			return
 		}
 	}
 

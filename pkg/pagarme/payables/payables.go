@@ -68,11 +68,11 @@ func (api *API) Get(id string) (response *pagarme.Response,  payable *pagarme.Pa
 		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
 			api.Config.Logger.Error("could not unmarshal payable: " + rerr.Error())
 			return
-		} else {
-			if rerr = www.Unmarshal(resp, result); rerr != nil {
-				api.Config.Logger.Error("could not unmarshal payable: [GetPayable]" + rerr.Error())
-				return
-			}
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal payable: [GetPayable]" + rerr.Error())
+			return
 		}
 	}
 

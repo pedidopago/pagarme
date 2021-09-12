@@ -117,7 +117,17 @@ const (
 type BalanceOperationStatus string
 
 const (
-	BalOpStatusWaitingFunds = "waiting_funds"
-	BalOpStatusAvailable    = "available"
-	BalOpStatusTransferred  = "transferred"
+	BalOpStatusWaitingFunds BalanceOperationStatus = "waiting_funds"
+	BalOpStatusAvailable    BalanceOperationStatus = "available"
+	BalOpStatusTransferred  BalanceOperationStatus = "transferred"
+)
+
+type BalanceOperationType string
+
+const (
+	BalOpTypePayable       BalanceOperationType = "payable"
+	BalOpTypeRefund        BalanceOperationType = "refund"
+	BalOpTypeAnticipation  BalanceOperationType = "anticipation"
+	BalOpTypeTransfer      BalanceOperationType = "transfer"
+	BalOpTypeFeeCollection BalanceOperationType = "fee_collection"
 )
