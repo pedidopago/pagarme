@@ -95,12 +95,39 @@ func (api *API) Create(in CreateInput) (response *pagarme.Response, transfer *pa
 
 	if api.Config.Trace {
 		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal transfe: " + rerr.Error())
+			api.Config.Logger.Error("could not unmarshal transfer: " + rerr.Error())
 			return
 		}
 	} else {
 		if rerr = www.Unmarshal(resp, &result); rerr != nil {
 			api.Config.Logger.Error("could not unmarshal transfer: [Create]" + rerr.Error())
+			return
+		}
+	}
+
+	transfer = result
+	response = www.Ok()
+	return
+}
+
+func (api *API) Cancel(id string) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/transfers/%s/cancel", id), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Transfer)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfer: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfer: [Cancel]" + rerr.Error())
 			return
 		}
 	}
