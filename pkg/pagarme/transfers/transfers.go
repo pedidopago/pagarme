@@ -73,3 +73,39 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, transfers [
 	response = www.Ok()
 	return
 }
+
+type CreateInput struct {
+	Amount string `json:"amount"`
+	RecipientId string `json:"recipient_id"`
+	Metadata map[string]interface{} `json:"metadata"`
+}
+
+// Create
+//
+// POST https://api.pagar.me/1/transfers
+func (api *API) Create(in CreateInput) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, "/transfers", www.JSONReader(in))
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Transfer)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfe: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfer: [Create]" + rerr.Error())
+			return
+		}
+	}
+
+	transfer = result
+	response = www.Ok()
+	return
+}
