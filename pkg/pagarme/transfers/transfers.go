@@ -84,7 +84,7 @@ type CreateInput struct {
 //
 // POST https://api.pagar.me/1/transfers
 func (api *API) Create(in CreateInput) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/transfers", www.JSONReader(in))
+	resp, rerr := api.Config.Do(http.MethodPost, "/transfers", www.JSONReader(in))
 	if rerr != nil {
 		return
 	}
