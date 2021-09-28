@@ -75,7 +75,7 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, transfers [
 }
 
 type CreateInput struct {
-	Amount string `json:"amount"`
+	Amount int `json:"amount"`
 	RecipientId string `json:"recipient_id"`
 	Metadata map[string]interface{} `json:"metadata"`
 }
