@@ -16,6 +16,20 @@ type CreateRecipient struct {
 	Metadata                      interface{}          `json:"metadata,omitempty"`
 }
 
+// UpdateRecipient struct
+type UpdateRecipient struct {
+	TransferInterval               *string     `json:"transfer_interval,omitempty"`
+	TransferDay                    *int        `json:"transfer_day,omitempty"`
+	TransferEnabled                *bool       `json:"transfer_enabled,omitempty"`
+	AnticipatableVolumePercentage  *int        `json:"anticipatable_volume_percentage,omitempty"`
+	BankAccountId                  *string     `json:"bank_account_id,omitempty"`
+	AutomaticAnticipationEnabled   *bool       `json:"automatic_anticipation_enabled,omitempty"`
+	AutomaticAnticipationType      *string     `json:"automatic_anticipation_type,omitempty"`
+	AutomaticAnticipationDays      *string     `json:"automatic_anticipation_days,omitempty"`
+	AutomaticAnticipation1025Delay *string     `json:"automatic_anticipation_1025_delay,omitempty"`
+	Metadata                       interface{} `json:"metadata,omitempty"`
+}
+
 // Recipient structure to define recipient
 type Recipient struct {
 	Object                        string      `json:"object,omitempty"`

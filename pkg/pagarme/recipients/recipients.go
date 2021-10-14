@@ -35,16 +35,44 @@ func (api *API) NewRecipient(recipient *pagarme.CreateRecipient) (*pagarme.Respo
 
 	if api.Config.Trace {
 		if err := www.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+			api.Config.Logger.Error("could not unmarshal recipient: " + err.Error())
 			return nil, nil, err
 		}
 	} else {
 		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
+			api.Config.Logger.Error("could not unmarshal recipient [NewRecipient]: " + err.Error())
 			return nil, nil, err
 		}
 	}
 	return www.Ok(), result, nil
+}
+
+// UpdateRecipient consume a pagarme API to update a recipient and return its information
+func (api *API) UpdateRecipient(recipientId string, updateRecipient *pagarme.UpdateRecipient) (response *pagarme.Response, recipient *pagarme.Recipient, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodPut, fmt.Sprintf("/recipients/%s", recipientId), www.JSONReader(updateRecipient))
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Recipient)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal recipient: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal recipient: [UpdateRecipient]" + rerr.Error())
+			return
+		}
+	}
+
+	recipient = result
+	response = www.Ok()
+	return
 }
 
 func (api *API) GetRecipient(id string) (response *pagarme.Response, recipient *pagarme.Recipient, rerr error) {
