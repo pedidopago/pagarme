@@ -5,8 +5,6 @@ import (
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
 	"net/http"
-	"net/url"
-	"strconv"
 )
 
 // API is the /1/transfers API
@@ -21,34 +19,15 @@ func New(cfg *pagarme.Config) *API {
 	}
 }
 
-type QueryInput struct {
-	Count int
-	Page int
-	Filter string
-	Value string
-}
-
-func (in *QueryInput) Export() string {
-	vv := url.Values{}
-	if in.Count != 0 {
-		vv.Set("count", strconv.Itoa(in.Count))
-	}
-	if in.Page != 0 {
-		vv.Set("page", strconv.Itoa(in.Page))
-	} else {
-		vv.Set("page", "1")
-	}
-	if in.Filter != "" {
-		vv.Set(in.Filter, in.Value)
-	}
-	return vv.Encode()
-}
-
 // Query
 //
 // GET https://api.pagar.me/1/transfers
-func (api *API) Query(input QueryInput) (response *pagarme.Response, transfers []pagarme.Transfer, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transfers?%s", input.Export()), nil)
+func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response, transfers []pagarme.Transfer, rerr error) {
+	url := "/transfers"
+	if params != nil {
+		url += "?" + params.Build()
+	}
+	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
 	if rerr != nil {
 		return
 	}
