@@ -1,5 +1,7 @@
 package pagarme
 
+const MaxItemsPerPage = 1000
+
 type DocumentType string
 
 const (
