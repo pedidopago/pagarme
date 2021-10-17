@@ -2,6 +2,17 @@ package pagarme
 
 import "time"
 
+type BalanceField struct {
+	Amount int `json:"amount"`
+}
+
+type Balance struct {
+	Object       string       `json:"object"`
+	WaitingFunds BalanceField `json:"waiting_funds"`
+	Available    BalanceField `json:"available"`
+	Transferred  BalanceField `json:"transferred"`
+}
+
 type BalanceOperation struct {
 	Object           string                 `json:"object"`
 	Id               int                    `json:"id"`

@@ -120,6 +120,36 @@ func (in *GetBalanceOperationsInput) Export() string {
 	return vv.Encode()
 }
 
+// GetBalance
+//
+// https://api.pagar.me/1/recipients/recipient_id/balance
+func (api *API) GetBalance(recipientId string) (response *pagarme.Response, balance *pagarme.Balance, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/balance", recipientId), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Balance)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal balance: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal balance: [GetBalance]" + rerr.Error())
+			return
+		}
+	}
+
+	balance = result
+	response = www.Ok()
+	return
+}
+
 // GetBalanceOperations
 //
 // https://api.pagar.me/1/recipients/recipient_id/balance/operations
