@@ -2,12 +2,9 @@ package recipients
 
 import (
 	"fmt"
-	"net/http"
-	"net/url"
-	"strconv"
-
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"net/http"
 )
 
 // API is the /1/cards API
@@ -102,24 +99,6 @@ func (api *API) GetRecipient(id string) (response *pagarme.Response, recipient *
 	return
 }
 
-type GetBalanceOperationsInput struct {
-	Count int
-	Page int
-}
-
-func (in *GetBalanceOperationsInput) Export() string {
-	vv := url.Values{}
-	if in.Count != 0 {
-		vv.Set("count", strconv.Itoa(in.Count))
-	}
-	if in.Page != 0 {
-		vv.Set("page", strconv.Itoa(in.Page))
-	} else {
-		vv.Set("page", "1")
-	}
-	return vv.Encode()
-}
-
 // GetBalance
 //
 // https://api.pagar.me/1/recipients/recipient_id/balance
@@ -153,8 +132,12 @@ func (api *API) GetBalance(recipientId string) (response *pagarme.Response, bala
 // GetBalanceOperations
 //
 // https://api.pagar.me/1/recipients/recipient_id/balance/operations
-func (api *API) GetBalanceOperations(recipientId string, input GetBalanceOperationsInput) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/balance/operations?%s", recipientId, input.Export()), nil)
+func (api *API) GetBalanceOperations(recipientId string, params *pagarme.QueryBuilder) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
+	url := fmt.Sprintf("/recipients/%s/balance/operations", recipientId)
+	if params != nil {
+		url += "?" + params.Build()
+	}
+	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
 	if rerr != nil {
 		return
 	}

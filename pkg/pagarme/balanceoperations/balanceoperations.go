@@ -1,13 +1,9 @@
 package balanceoperations
 
 import (
-	"fmt"
 	"github.com/pedidopago/pagarme/internal/pkg/www"
 	"github.com/pedidopago/pagarme/pkg/pagarme"
 	"net/http"
-	"net/url"
-	"strconv"
-	"time"
 )
 
 // API is the /1/balance/operations API
@@ -49,42 +45,15 @@ func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.B
 	return
 }
 
-type QueryInput struct {
-	Count     int
-	Page      int
-	Status    *pagarme.BalanceOperationStatus
-	StartDate *time.Time
-	EndDate   *time.Time
-	Extra map[string]string
-}
-
-func (in *QueryInput) Export() string {
-	vv := url.Values{}
-	if in.Count != 0 {
-		vv.Set("count", strconv.Itoa(in.Count))
+// Query
+//
+// GET https://api.pagar.me/1/balance/operations
+func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
+	url := "/balance/operations"
+	if params != nil {
+		url += "?" + params.Build()
 	}
-	if in.Page != 0 {
-		vv.Set("page", strconv.Itoa(in.Page))
-	} else {
-		vv.Set("page", "1")
-	}
-	if in.Status != nil {
-		vv.Set("status", string(*in.Status))
-	}
-	if in.StartDate != nil {
-		vv.Set("start_date", strconv.FormatInt(in.StartDate.Unix() * 1000, 10))
-	}
-	if in.EndDate != nil {
-		vv.Set("end_date", strconv.FormatInt(in.StartDate.Unix() * 1000, 10))
-	}
-	for k, v := range in.Extra {
-		vv.Set(k, v)
-	}
-	return vv.Encode()
-}
-
-func (api *API) Query(input QueryInput) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/balance/operations?%s", input.Export()), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
 	if rerr != nil {
 		return
 	}
