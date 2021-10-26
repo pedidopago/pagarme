@@ -53,6 +53,36 @@ func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response,
 	return
 }
 
+// Get
+//
+// https://api.pagar.me/1/transfers/transfer_id
+func (api *API) Get(id int) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transfers/%d", id), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.Transfer)
+
+	if api.Config.Trace {
+		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfer: " + rerr.Error())
+			return
+		}
+	} else {
+		if rerr = www.Unmarshal(resp, &result); rerr != nil {
+			api.Config.Logger.Error("could not unmarshal transfer: [Get]" + rerr.Error())
+			return
+		}
+	}
+
+	transfer = result
+	response = www.Ok()
+	return
+}
+
 type CreateInput struct {
 	Amount int `json:"amount"`
 	RecipientId string `json:"recipient_id"`
