@@ -162,3 +162,15 @@ func (api *API) GetBalanceOperations(recipientId string, params *pagarme.QueryBu
 	response = www.Ok()
 	return
 }
+
+// DownloadBalanceOperations
+//
+// https://api.pagar.me/1/recipients/recipient_id/balance/operations.ext
+func (api *API) DownloadBalanceOperations(recipientId string, ext string, params *pagarme.QueryBuilder) (response *http.Response, rerr error) {
+	url := fmt.Sprintf("/recipients/%s/balance/operations.%s", recipientId, ext)
+	if params != nil {
+		url += "?" + params.Build()
+	}
+	response, rerr = api.Config.Do(http.MethodGet, url, nil)
+	return
+}
