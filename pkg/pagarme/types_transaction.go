@@ -22,6 +22,7 @@ type Transaction struct {
 	BoletoInstructions   string                 `json:"boleto_instructions,omitempty" form:"boleto_instructions,omitempty"`
 	PixExpirationDate    string                 `json:"pix_expiration_date,omitempty" form:"pix_expiration_date,omitempty"`
 	SplitRules           []*SplitRule           `json:"split_rules,omitempty" form:"split_rules,omitempty"`
+	BoletoRules          []BoletoRule           `json:"boleto_rules,omitempty" form:"boleto_rules,omitempty"`
 	Customer             *Customer              `json:"customer" form:"customer"`
 	Billing              *Billing               `json:"billing" form:"billing"`
 	Shipping             *Shipping              `json:"shipping" form:"shipping"`
@@ -110,3 +111,10 @@ type CardHashData struct {
 	CardExpirationDate MMYY   `json:"card_expiration_date,omitempty" form:"card_expiration_date,omitempty"`
 	CardCvv            string `json:"card_cvv,omitempty" form:"card_cvv,omitempty"`
 }
+
+type BoletoRule string
+
+const (
+	RuleStrictExpirationDate BoletoRule = "strict_expiration_date"
+	RuleNoStrict             BoletoRule = "no_strict"
+)
