@@ -79,6 +79,17 @@ type Transaction struct {
 	// discount
 }
 
+func GetBoletoPdfUrl(boletoUrl string) string {
+	if boletoUrl == "" {
+		return ""
+	}
+	return boletoUrl + "?format=pdf"
+}
+
+func (t *Transaction) GetBoletoPdfUrl() string {
+	return GetBoletoPdfUrl(t.BoletoURL)
+}
+
 type BankAccount struct {
 	ID                 int32           `json:"id,omitempty"`
 	BankAccountID      string          `json:"bank_account_id,omitempty"`
