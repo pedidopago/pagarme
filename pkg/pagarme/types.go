@@ -106,6 +106,7 @@ type Card struct {
 }
 
 type NCard struct {
+	CardHash       string `json:"card_hash"`
 	CardNumber     string `json:"card_number"`
 	HolderName     string `json:"card_holder_name"`
 	ExpirationDate string `json:"card_expiration_date"`
