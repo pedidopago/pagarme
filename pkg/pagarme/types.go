@@ -106,11 +106,11 @@ type Card struct {
 }
 
 type NCard struct {
-	CardHash       string `json:"card_hash"`
-	CardNumber     string `json:"card_number"`
-	HolderName     string `json:"card_holder_name"`
-	ExpirationDate string `json:"card_expiration_date"`
-	CVV            string `json:"card_cvv"`
+	CardHash       string `json:"card_hash,omitempty"`
+	CardNumber     string `json:"card_number,omitempty"`
+	HolderName     string `json:"card_holder_name,omitempty"`
+	ExpirationDate string `json:"card_expiration_date,omitempty"`
+	CVV            string `json:"card_cvv,omitempty"`
 }
 
 type Response struct {
