@@ -38,7 +38,7 @@ type QueryTime struct {
 
 // Format to pagarme query
 func (qt *QueryTime) Format() string {
-	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.T.Unix())
+	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.T.UnixNano()/1000000)
 }
 
 // PName of the query param
