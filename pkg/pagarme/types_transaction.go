@@ -21,6 +21,7 @@ type Transaction struct {
 	Capture              string                 `json:"capture,omitempty" form:"capture,omitempty"`
 	BoletoInstructions   string                 `json:"boleto_instructions,omitempty" form:"boleto_instructions,omitempty"`
 	PixExpirationDate    string                 `json:"pix_expiration_date,omitempty" form:"pix_expiration_date,omitempty"`
+	PixAdditionalFields  []NameValue            `json:"pix_additional_fields,omitempty" form:"pix_additional_fields,omitempty"`
 	SplitRules           []*SplitRule           `json:"split_rules,omitempty" form:"split_rules,omitempty"`
 	BoletoRules          []BoletoRule           `json:"boleto_rules,omitempty" form:"boleto_rules,omitempty"`
 	Customer             *Customer              `json:"customer" form:"customer"`
@@ -129,3 +130,8 @@ const (
 	RuleStrictExpirationDate BoletoRule = "strict_expiration_date"
 	RuleNoStrict             BoletoRule = "no_strict"
 )
+
+type NameValue struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
