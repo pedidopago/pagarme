@@ -160,7 +160,7 @@ type RefundInput struct {
 	// paid até que o valor total da transação tenha sido estornado.
 	Amount      int                    `json:"amount,omitempty"`
 	SplitRules  []*pagarme.SplitRule   `json:"split_rules,omitempty"`
-	Async       bool                   `json:"async,omitempty"`
+	Async       bool                   `json:"async"`
 	Metadata    map[string]interface{} `json:"metadata,omitempty"`
 	BankAccount *pagarme.BankAccount   `json:"bank_account,omitempty"`
 }
