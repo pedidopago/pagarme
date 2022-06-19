@@ -6,13 +6,13 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/recipients/:recipient_id/bulk_anticipations API
 type API struct {
-	Config *pagarme.Config
+	Config      *pagarme.Config
 	RecipientID string
 }
 
@@ -37,20 +37,13 @@ func (api *API) NewAnticipation(req *pagarme.CreateAnticipation) (response *paga
 	}
 	result := new(pagarme.Anticipation)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: [NewAnticipation]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
+		return
 	}
 
 	anticipation = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -79,20 +72,13 @@ func (api *API) GetLimits(input GetLimitsInput) (response *pagarme.Response, lim
 	}
 	result := new(pagarme.Limits)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal limits: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal limits: [GetLimits]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal limits: " + rerr.Error())
+		return
 	}
 
 	limits = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -109,20 +95,13 @@ func (api *API) ConfirmNewAnticipation(bulkAnticipationId string) (response *pag
 	}
 	result := new(pagarme.Anticipation)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: [ConfirmNewAnticipation]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
+		return
 	}
 
 	anticipation = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -139,28 +118,21 @@ func (api *API) CancelPendingAnticipation(bulkAnticipationId string) (response *
 	}
 	result := new(pagarme.Anticipation)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipation: [CancelPendingAnticipation]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal anticipation: " + rerr.Error())
+		return
 	}
 
 	anticipation = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
 type QueryInput struct {
-	Count int
-	Page int
+	Count  int
+	Page   int
 	Filter string
-	Value string
+	Value  string
 }
 
 func (in *QueryInput) Export() string {
@@ -191,7 +163,7 @@ func (api *API) Delete(bulkAnticipationId string) (response *pagarme.Response, r
 		return
 	}
 
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -208,19 +180,12 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, anticipatio
 	}
 	result := make([]pagarme.Anticipation, 0)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipations: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal anticipations: [Query]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, &result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal anticipations: " + rerr.Error())
+		return
 	}
 
 	anticipations = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }

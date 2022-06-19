@@ -3,7 +3,7 @@ package payables
 import (
 	"time"
 
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // QueryInput is the input data of Query

@@ -3,6 +3,7 @@ package pagarme
 import (
 	"bytes"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -114,10 +115,11 @@ type NCard struct {
 }
 
 type Response struct {
-	Code   ResponseCode `json:"code,omitempty" form:"code,omitempty"`
-	Errors []Perror     `json:"errors,omitempty" form:"errors,omitempty"`
-	URL    string       `json:"url,omitempty" form:"url,omitempty"`
-	Method string       `json:"method,omitempty" form:"method,omitempty"`
+	HttpResponse *http.Response
+	Code         ResponseCode `json:"code,omitempty" form:"code,omitempty"`
+	Errors       []Perror     `json:"errors,omitempty" form:"errors,omitempty"`
+	URL          string       `json:"url,omitempty" form:"url,omitempty"`
+	Method       string       `json:"method,omitempty" form:"method,omitempty"`
 }
 
 type Perror struct {

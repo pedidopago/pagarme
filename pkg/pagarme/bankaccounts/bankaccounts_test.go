@@ -1,10 +1,11 @@
 package bankaccounts
 
 import (
-	"github.com/pedidopago/pagarme/pkg/pagarme"
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
+
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
+	"github.com/stretchr/testify/require"
 )
 
 func getKeysEnv() (apikey, cryptokey string) {

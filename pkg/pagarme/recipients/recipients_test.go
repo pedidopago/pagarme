@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 func getKeysEnv() (apikey, cryptokey string) {

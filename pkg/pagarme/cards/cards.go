@@ -3,8 +3,8 @@ package cards
 import (
 	"net/http"
 
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/cards API
@@ -30,16 +30,10 @@ func (api *API) NewCard(cr *pagarme.NCard) (*pagarme.Response, *pagarme.Card, er
 	}
 	result := &pagarme.Card{}
 
-	if api.Config.Trace {
-		if err := www.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
-			return nil, nil, err
-		}
-	} else {
-		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
-			return nil, nil, err
-		}
+	if err := www.Unmarshal(api.Config, resp, result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+		return nil, nil, err
 	}
-	return www.Ok(), result, nil
+
+	return www.Ok(resp), result, nil
 }

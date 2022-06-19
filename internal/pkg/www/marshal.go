@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 	"go.uber.org/zap"
 )
 
@@ -19,13 +20,24 @@ func JSONReader(data interface{}) io.Reader {
 	return r
 }
 
-func Unmarshal(resp *http.Response, target interface{}) error {
+func Unmarshal(config *pagarme.Config, resp *http.Response, target any) error {
+	if config.SkipUnmarshal {
+		return nil
+	}
+	if config.Trace {
+		return unmarshalTrace(config.Logger, resp, target)
+	} else {
+		return unmarshal(resp, target)
+	}
+}
+
+func unmarshal(resp *http.Response, target any) error {
 	defer resp.Body.Close()
 	dec := json.NewDecoder(resp.Body)
 	return dec.Decode(target)
 }
 
-func UnmarshalTrace(logger *zap.Logger, resp *http.Response, target interface{}) error {
+func unmarshalTrace(logger *zap.Logger, resp *http.Response, target any) error {
 	bs, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err

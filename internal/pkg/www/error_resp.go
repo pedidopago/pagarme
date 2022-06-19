@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 func ExtractError(resp *http.Response) *pagarme.Response {
@@ -28,8 +28,9 @@ func ExtractError(resp *http.Response) *pagarme.Response {
 	return erbundle
 }
 
-func Ok() *pagarme.Response {
+func Ok(httpResponse *http.Response) *pagarme.Response {
 	return &pagarme.Response{
-		Code: pagarme.ResponseCodeOk,
+		Code:         pagarme.ResponseCodeOk,
+		HttpResponse: httpResponse,
 	}
 }

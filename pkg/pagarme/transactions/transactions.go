@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/transactions API
@@ -35,18 +35,11 @@ func (api *API) Put(tr *pagarme.Transaction) (*pagarme.Response, *pagarme.Transa
 	}
 	result := &pagarme.Transaction{}
 
-	if api.Config.Trace {
-		if err := www.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
-			return nil, nil, err
-		}
-	} else {
-		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
-			return nil, nil, err
-		}
+	if err := www.Unmarshal(api.Config, resp, result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+		return nil, nil, err
 	}
-	return www.Ok(), result, nil
+	return www.Ok(resp), result, nil
 }
 
 // Get a transaction by ID
@@ -61,12 +54,12 @@ func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error)
 		return werr, nil, nil
 	}
 	result := &pagarme.Transaction{}
-	if err := www.Unmarshal(resp, result); err != nil {
+	if err := www.Unmarshal(api.Config, resp, result); err != nil {
 		api.Config.Logger.Error("could not unmarshal transaction [Get]: " + err.Error())
 		return nil, nil, err
 	}
 
-	return www.Ok(), result, nil
+	return www.Ok(resp), result, nil
 }
 
 type QueryInput struct {
@@ -119,12 +112,12 @@ func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transactio
 		return werr, nil, nil
 	}
 	result := make([]pagarme.Transaction, 0)
-	if err := www.Unmarshal(resp, &result); err != nil {
+	if err := www.Unmarshal(api.Config, resp, &result); err != nil {
 		api.Config.Logger.Error("could not unmarshal transactions [Query]: " + err.Error())
 		return nil, nil, err
 	}
 
-	return www.Ok(), result, nil
+	return www.Ok(resp), result, nil
 }
 
 // PutDevBillet (Testando pagamento de Boletos)
@@ -143,12 +136,12 @@ func (api *API) PutDevBillet(tid string, status pagarme.TrStatus) (*pagarme.Resp
 		return werr, nil, nil
 	}
 	result := &pagarme.Transaction{}
-	if err := www.Unmarshal(resp, result); err != nil {
+	if err := www.Unmarshal(api.Config, resp, result); err != nil {
 		api.Config.Logger.Error("could not unmarshal transaction [Get]: " + err.Error())
 		return nil, nil, err
 	}
 
-	return www.Ok(), result, nil
+	return www.Ok(resp), result, nil
 }
 
 // https://www.febraban.org.br/associados/utilitarios/bancos.asp?msg=&id_assunto=84&id_pasta=0&tipo=
@@ -179,18 +172,12 @@ func (api *API) Refund(id int64, input *RefundInput) (*pagarme.Response, *pagarm
 
 	result := &pagarme.Transaction{}
 
-	if api.Config.Trace {
-		if err := www.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
-			return nil, nil, err
-		}
-	} else {
-		if err := www.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
-			return nil, nil, err
-		}
+	if err := www.Unmarshal(api.Config, resp, result); err != nil {
+		api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
+		return nil, nil, err
 	}
-	return www.Ok(), result, nil
+
+	return www.Ok(resp), result, nil
 }
 
 // CardHashKey generates a new key to encrypt card_hash
@@ -205,12 +192,12 @@ func (api *API) CardHashKey() (response *pagarme.Response, cardHash *pagarme.Car
 		return
 	}
 	result := new(pagarme.CardHash)
-	if rerr = www.Unmarshal(resp, result); rerr != nil {
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
 		api.Config.Logger.Error("could not unmarshal card hash key [Get]: " + rerr.Error())
 		return
 	}
 	cardHash = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -226,11 +213,11 @@ func (api *API) Payables(tid string) (response *pagarme.Response, payables []pag
 		return
 	}
 	result := make([]pagarme.Payable, 0)
-	if rerr = www.Unmarshal(resp, &result); rerr != nil {
+	if rerr = www.Unmarshal(api.Config, resp, &result); rerr != nil {
 		api.Config.Logger.Error("could not unmarshal transaction payables [Get]: " + rerr.Error())
 		return
 	}
 	payables = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }

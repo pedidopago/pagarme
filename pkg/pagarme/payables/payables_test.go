@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 func getKeysEnv() (apikey, cryptokey string) {

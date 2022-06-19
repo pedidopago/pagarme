@@ -3,8 +3,8 @@ package payables
 import (
 	"net/http"
 
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/payables API
@@ -36,26 +36,18 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 	}
 	result := make([]pagarme.Payable, 0)
 	//
-	if api.Config.Trace {
-		if err := www.UnmarshalTrace(api.Config.Logger, resp, &result); err != nil {
-			api.Config.Logger.Error("could not unmarshal payables: " + err.Error())
-			return nil, nil, err
-		}
-	} else {
-		if err := www.Unmarshal(resp, &result); err != nil {
-			api.Config.Logger.Error("could not unmarshal payables [Get]: " + err.Error())
-			return nil, nil, err
-		}
+	if err := www.Unmarshal(api.Config, resp, &result); err != nil {
+		api.Config.Logger.Error("could not unmarshal payables: " + err.Error())
+		return nil, nil, err
 	}
-	return www.Ok(), result, nil
+	return www.Ok(resp), result, nil
 }
-
 
 // Get retrieves a payable by id
 //
 // GET https://api.pagar.me/1/payables/payable_id
-func (api *API) Get(id string) (response *pagarme.Response,  payable *pagarme.Payable, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/payables/" + id, nil)
+func (api *API) Get(id string) (response *pagarme.Response, payable *pagarme.Payable, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, "/payables/"+id, nil)
 	if rerr != nil {
 		return
 	}
@@ -64,20 +56,12 @@ func (api *API) Get(id string) (response *pagarme.Response,  payable *pagarme.Pa
 	}
 	result := new(pagarme.Payable)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal payable: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal payable: [GetPayable]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal payable: " + rerr.Error())
+		return
 	}
 
 	payable = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
-

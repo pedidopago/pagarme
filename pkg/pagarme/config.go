@@ -15,19 +15,20 @@ import (
 
 // Config holds the config of pagarme
 type Config struct {
-	Apikey    string
-	Cryptokey string
-	Client    *http.Client
-	Trace     bool
-	Logger    *zap.Logger
+	Apikey        string
+	Cryptokey     string
+	Client        *http.Client
+	Trace         bool
+	SkipUnmarshal bool
+	Logger        *zap.Logger
 
-	HandleRateLimit bool
-	TimeoutRetry time.Duration
+	HandleRateLimit  bool
+	TimeoutRetry     time.Duration
 	ExpBackOffParams *ExponentialBackoffParams
 }
 
 type ExponentialBackoffParams struct {
-	MaxRetries int
+	MaxRetries   int
 	IntervalBase time.Duration
 }
 
@@ -44,8 +45,9 @@ func Default(apikey, cryptokey string) *Config {
 		Client: &http.Client{
 			Timeout: time.Second * 60,
 		},
-		Trace:  false,
-		Logger: zl,
+		Trace:         false,
+		SkipUnmarshal: false,
+		Logger:        zl,
 	}
 	return cfg
 }
@@ -120,9 +122,9 @@ func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Respons
 	var rerr = inerr
 	var intervalBase = float64(c.ExpBackOffParams.IntervalBase.Milliseconds())
 	for attempt := 1; attempt <= c.ExpBackOffParams.MaxRetries; attempt++ {
-		var waitFor = time.Millisecond * time.Duration(intervalBase * math.Pow(2, float64(attempt - 1)))
+		var waitFor = time.Millisecond * time.Duration(intervalBase*math.Pow(2, float64(attempt-1)))
 		if c.TimeoutRetry != 0 {
-			if time.Now().Sub(retryStartedAt) + waitFor > c.TimeoutRetry {
+			if time.Now().Sub(retryStartedAt)+waitFor > c.TimeoutRetry {
 				c.Logger.Debug("rateLimitReachedHandler: timeout retry non sufficient (2)")
 				return resp, inerr
 			}
@@ -140,6 +142,3 @@ func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Respons
 
 	return resp, rerr
 }
-
-
-

@@ -3,7 +3,7 @@ package errors
 import (
 	"strconv"
 
-	"github.com/pedidopago/pagarme/pkg/util"
+	"github.com/pedidopago/pagarme/v2/pkg/util"
 )
 
 var errAgent = map[string]string{

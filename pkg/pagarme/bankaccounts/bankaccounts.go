@@ -2,12 +2,13 @@ package bankaccounts
 
 import (
 	"fmt"
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/bank_accounts API
@@ -23,18 +24,18 @@ func New(cfg *pagarme.Config) *API {
 }
 
 type QueryInput struct {
-	Count     int
-	Page      int
-	Id        *string
-	BankCode  *string
-	Agencia *string
-	AgenciaDv *string
-	Conta *string
-	ContaDv *string
+	Count          int
+	Page           int
+	Id             *string
+	BankCode       *string
+	Agencia        *string
+	AgenciaDv      *string
+	Conta          *string
+	ContaDv        *string
 	DocumentNumber *string
-	LegalName *string
-	DateCreated *time.Time
-	Extra map[string]string
+	LegalName      *string
+	DateCreated    *time.Time
+	Extra          map[string]string
 }
 
 func (in *QueryInput) Export() string {
@@ -72,7 +73,7 @@ func (in *QueryInput) Export() string {
 		vv.Set("legal_name", *v)
 	}
 	if v := in.DateCreated; v != nil {
-		vv.Set("date_created", strconv.FormatInt(v.Unix() * 1000, 10))
+		vv.Set("date_created", strconv.FormatInt(v.Unix()*1000, 10))
 	}
 	for k, v := range in.Extra {
 		vv.Set(k, v)
@@ -90,20 +91,13 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, accounts []
 	}
 	result := make([]pagarme.BankAccount, 0)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank accounts: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank accounts: [Query]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, &result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal bank accounts: " + rerr.Error())
+		return
 	}
 
 	accounts = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -117,20 +111,13 @@ func (api *API) Get(id int) (response *pagarme.Response, account *pagarme.BankAc
 	}
 	result := new(pagarme.BankAccount)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank account: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank account: [Get]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal bank account: " + rerr.Error())
+		return
 	}
 
 	account = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -141,19 +128,12 @@ func (api *API) Create(createInput pagarme.BankAccount) (response *pagarme.Respo
 	}
 	result := new(pagarme.BankAccount)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank account: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal bank account: [Create]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal bank account: " + rerr.Error())
+		return
 	}
 
 	account = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }

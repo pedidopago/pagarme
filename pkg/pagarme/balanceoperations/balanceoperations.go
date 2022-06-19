@@ -1,9 +1,10 @@
 package balanceoperations
 
 import (
-	"github.com/pedidopago/pagarme/internal/pkg/www"
-	"github.com/pedidopago/pagarme/pkg/pagarme"
 	"net/http"
+
+	"github.com/pedidopago/pagarme/v2/internal/pkg/www"
+	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
 )
 
 // API is the /1/balance/operations API
@@ -19,7 +20,7 @@ func New(cfg *pagarme.Config) *API {
 }
 
 func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.BalanceOperation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/balance/operations/" + id, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/balance/operations/"+id, nil)
 	if rerr != nil {
 		return
 	}
@@ -28,20 +29,13 @@ func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.B
 	}
 	result := new(pagarme.BalanceOperation)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal balance operations: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal balance operations: [Get]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal balance operations: " + rerr.Error())
+		return
 	}
 
 	operation = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
 
@@ -62,19 +56,12 @@ func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response,
 	}
 	result := make([]pagarme.BalanceOperation, 0)
 
-	if api.Config.Trace {
-		if rerr = www.UnmarshalTrace(api.Config.Logger, resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal balance operations: " + rerr.Error())
-			return
-		}
-	} else {
-		if rerr = www.Unmarshal(resp, &result); rerr != nil {
-			api.Config.Logger.Error("could not unmarshal balance operations: [Query]" + rerr.Error())
-			return
-		}
+	if rerr = www.Unmarshal(api.Config, resp, &result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal balance operations: " + rerr.Error())
+		return
 	}
 
 	operations = result
-	response = www.Ok()
+	response = www.Ok(resp)
 	return
 }
