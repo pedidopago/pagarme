@@ -126,6 +126,9 @@ func (api *API) Create(createInput pagarme.BankAccount) (response *pagarme.Respo
 	if rerr != nil {
 		return
 	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
 	result := new(pagarme.BankAccount)
 
 	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
