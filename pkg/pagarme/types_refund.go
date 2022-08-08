@@ -9,7 +9,7 @@ type Refund struct {
 	Fee                  int            `json:"fee"`
 	FraudCoverageFee     int            `json:"fraud_coverage_fee"`
 	Type                 string         `json:"type"`
-	Status               string         `json:"status"`
+	Status               RefundStatus   `json:"status"`
 	ChargeFeeRecipientId string         `json:"charge_fee_recipient_id"`
 	BankAccountId        int            `json:"bank_account_id"`
 	TransactionId        int            `json:"transaction_id"`
