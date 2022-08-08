@@ -129,6 +129,7 @@ func (api *API) CancelPendingAnticipation(bulkAnticipationId string) (response *
 }
 
 type QueryInput struct {
+	b      *pagarme.QueryBuilder
 	Count  int
 	Page   int
 	Filter string
