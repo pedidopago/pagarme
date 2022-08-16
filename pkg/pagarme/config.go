@@ -13,6 +13,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var DefaultApiVersion = "2017-08-28"
+
 // Config holds the config of pagarme
 type Config struct {
 	Apikey        string
@@ -43,7 +45,7 @@ func Default(apikey, cryptokey string) *Config {
 	cfg := &Config{
 		Apikey:    apikey,
 		Cryptokey: cryptokey,
-		Version:   "2017-08-28",
+		Version:   DefaultApiVersion,
 		Client: &http.Client{
 			Timeout: time.Second * 60,
 		},
@@ -61,7 +63,11 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	}
 	req.SetBasicAuth(c.Apikey, "x")
 	req.Header.Set("X-PagarMe-User-Agent", "github.com/pedidopago/pagarme Dev")
-	req.Header.Set("X-PagarMe-Version", c.Version)
+	if v := c.Version; v != "" {
+		req.Header.Set("X-PagarMe-Version", v)
+	} else {
+		req.Header.Set("X-PagarMe-Version", DefaultApiVersion)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	//
 	if c.Trace {
