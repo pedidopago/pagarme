@@ -135,3 +135,23 @@ type NameValue struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
+
+type TransactionOperation struct {
+	Id                    string    `json:"id"`
+	DateCreated           time.Time `json:"date_created"`
+	DateUpdated           time.Time `json:"date_updated"`
+	Status                string    `json:"status"`
+	FailReason            string    `json:"fail_reason,omitempty"`
+	Type                  string    `json:"type"`
+	Rollbacked            bool      `json:"rollbacked"`
+	Model                 string    `json:"model"`
+	ModelId               string    `json:"model_id"`
+	GroupId               string    `json:"group_id"`
+	NextGroupId           string    `json:"next_group_id,omitempty"`
+	RequestId             string    `json:"request_id"`
+	StartedAt             int64     `json:"started_at"`
+	EndedAt               int64     `json:"ended_at"`
+	Processor             string    `json:"processor"`
+	ProcessorResponseCode string    `json:"processor_response_code,omitempty"`
+	Metadata              any       `json:"metadata"`
+}
