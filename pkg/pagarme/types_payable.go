@@ -8,7 +8,7 @@ import "time"
 // Para cada parcela de uma transação é gerado um recebível, que também pode ser dividido por recebedor (no caso de um split ter sido feito).
 type Payable struct {
 	Object                   string        `json:"object"`
-	ID                       int           `json:"id"`
+	ID                       int64         `json:"id"`
 	Status                   PayableStatus `json:"status"`
 	Amount                   int           `json:"amount"`
 	Fee                      int           `json:"fee"`
