@@ -128,6 +128,16 @@ func (qi *QueryInput) Type(v pagarme.PayableType) *QueryInput {
 	return qi
 }
 
+func (qi *QueryInput) LiquidationArrangementID(v string) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "liquidation_arrangement_id",
+		Op:   pagarme.QueryOpEquals,
+		V:    v,
+	})
+	return qi
+}
+
 // ID -> Filtro pelo ID do recebível
 func (qi *QueryInput) ID(v string) *QueryInput {
 	qi.init()
