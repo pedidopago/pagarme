@@ -1,6 +1,7 @@
 package chargebacks
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
@@ -89,4 +90,9 @@ func (qi *QueryInput) Page(v int) *QueryInput {
 func (qi *QueryInput) Build() string {
 	qi.init()
 	return qi.b.Build()
+}
+
+func (qi *QueryInput) Values() url.Values {
+	qi.init()
+	return qi.b.Values()
 }

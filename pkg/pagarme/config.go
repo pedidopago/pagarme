@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"math"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -19,6 +20,7 @@ var DefaultApiVersion = "2017-08-28"
 type Config struct {
 	Apikey        string
 	Cryptokey     string
+	SessionId     string // WARNING: testing purposes only
 	Version       string
 	Client        *http.Client
 	Trace         bool
@@ -56,12 +58,42 @@ func Default(apikey, cryptokey string) *Config {
 	return cfg
 }
 
-func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, error) {
+// DefaultWithSession configuration uses:
+//
+// HTTP Client with 60 seconds timeout
+// os.stdout for logging
+// loglevel: error
+func DefaultWithSession(sessionID string) *Config {
+	zl, _ := zap.NewProduction()
+	cfg := &Config{
+		SessionId: sessionID,
+		Version:   DefaultApiVersion,
+		Client: &http.Client{
+			Timeout: time.Second * 60,
+		},
+		Trace:         false,
+		SkipUnmarshal: false,
+		Logger:        zl,
+	}
+	return cfg
+}
+
+func (c *Config) Do(method, urlpart string, query url.Values, body io.Reader) (*http.Response, error) {
 	req, err := http.NewRequest(method, "https://api.pagar.me/1"+urlpart, body)
 	if err != nil {
 		return nil, err
 	}
-	req.SetBasicAuth(c.Apikey, "x")
+	if v := c.SessionId; v != "" {
+		if query == nil {
+			query = make(url.Values)
+		}
+		query.Add("session_id", v)
+	} else {
+		req.SetBasicAuth(c.Apikey, "x")
+	}
+
+	req.URL.RawQuery = query.Encode()
+
 	req.Header.Set("X-PagarMe-User-Agent", "github.com/pedidopago/pagarme Dev")
 	if v := c.Version; v != "" {
 		req.Header.Set("X-PagarMe-Version", v)

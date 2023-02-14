@@ -25,10 +25,7 @@ func New(cfg *pagarme.Config) *API {
 // GET https://api.pagar.me/1/transfers
 func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response, transfers []pagarme.Transfer, rerr error) {
 	url := "/transfers"
-	if params != nil {
-		url += "?" + params.Build()
-	}
-	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, params.Values(), nil)
 	if rerr != nil {
 		return
 	}
@@ -51,7 +48,7 @@ func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response,
 //
 // https://api.pagar.me/1/transfers/transfer_id
 func (api *API) Get(id int) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transfers/%d", id), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transfers/%d", id), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -80,7 +77,7 @@ type CreateInput struct {
 //
 // POST https://api.pagar.me/1/transfers
 func (api *API) Create(in CreateInput) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, "/transfers", www.JSONReader(in))
+	resp, rerr := api.Config.Do(http.MethodPost, "/transfers", nil, www.JSONReader(in))
 	if rerr != nil {
 		return
 	}
@@ -100,7 +97,7 @@ func (api *API) Create(in CreateInput) (response *pagarme.Response, transfer *pa
 }
 
 func (api *API) Cancel(id string) (response *pagarme.Response, transfer *pagarme.Transfer, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/transfers/%s/cancel", id), nil)
+	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/transfers/%s/cancel", id), nil, nil)
 	if rerr != nil {
 		return
 	}

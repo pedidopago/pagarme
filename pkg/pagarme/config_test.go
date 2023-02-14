@@ -1,14 +1,15 @@
 package pagarme
 
 import (
-	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 )
 
 type roundTripFunc func(r *http.Request) (*http.Response, error)
@@ -22,12 +23,12 @@ func TestExceedRateLimitNoHandling(t *testing.T) {
 	require.NoError(t, err)
 
 	cfg := &Config{
-		Client:           &http.Client{
+		Client: &http.Client{
 			Timeout: time.Second * 60,
 		},
-		Trace:            false,
-		Logger:           zl,
-		HandleRateLimit:  false,
+		Trace:           false,
+		Logger:          zl,
+		HandleRateLimit: false,
 	}
 
 	var returnOkAfter time.Time
@@ -50,15 +51,15 @@ func TestExceedRateLimitNoHandling(t *testing.T) {
 			statusCode = http.StatusOK
 		}
 		return &http.Response{
-			Status:           http.StatusText(statusCode),
-			StatusCode:       statusCode,
-			Header:           header,
+			Status:     http.StatusText(statusCode),
+			StatusCode: statusCode,
+			Header:     header,
 		}, nil
 	})
 
 	returnOkAfter = time.Now().Add(time.Hour * 100)
 
-	resp, err := cfg.Do(http.MethodGet, "/transactions", nil)
+	resp, err := cfg.Do(http.MethodGet, "/transactions", nil, nil)
 	require.NoError(t, err)
 	require.Equal(t, http.StatusTooManyRequests, resp.StatusCode)
 
@@ -66,14 +67,14 @@ func TestExceedRateLimitNoHandling(t *testing.T) {
 
 	returnOkAfter = time.Now().Add(time.Second * 5)
 
-	resp, err = cfg.Do(http.MethodGet, "/transactions", nil)
+	resp, err = cfg.Do(http.MethodGet, "/transactions", nil, nil)
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, resp.StatusCode)
 
 	returnOkAfter = time.Now().Add(time.Second * 15)
 	cfg.TimeoutRetry = time.Second * 10
 
-	resp, err = cfg.Do(http.MethodGet, "/transactions", nil)
+	resp, err = cfg.Do(http.MethodGet, "/transactions", nil, nil)
 	require.NoError(t, err)
 	require.Equal(t, http.StatusTooManyRequests, resp.StatusCode)
 
@@ -88,7 +89,7 @@ func TestExceedRateLimitNoHandling(t *testing.T) {
 		IntervalBase: time.Millisecond * 500,
 	}
 
-	resp, err = cfg.Do(http.MethodGet, "/transactions", nil)
+	resp, err = cfg.Do(http.MethodGet, "/transactions", nil, nil)
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, resp.StatusCode)
 }
@@ -108,7 +109,7 @@ func Test_RateLimitPg(t *testing.T) {
 	wg.Add(parallelRequests)
 	for i := 0; i < parallelRequests; i++ {
 		go func(id int) {
-			resp, err := cfg.Do(http.MethodGet, "/balance", nil)
+			resp, err := cfg.Do(http.MethodGet, "/balance", nil, nil)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 			wg.Done()
@@ -124,9 +125,9 @@ func Test_RateLimitPg(t *testing.T) {
 		}(i + 1)
 	}
 	wg.Wait()
-	resp, err := cfg.Do(http.MethodGet, "/balance", nil)
+	resp, err := cfg.Do(http.MethodGet, "/balance", nil, nil)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	t.Log("RateLimitRemaining: " +  resp.Header.Get("X-RateLimit-Remaining"))
+	t.Log("RateLimitRemaining: " + resp.Header.Get("X-RateLimit-Remaining"))
 	require.Equal(t, http.StatusTooManyRequests, resp.StatusCode)
 }

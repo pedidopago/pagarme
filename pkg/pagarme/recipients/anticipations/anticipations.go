@@ -28,7 +28,7 @@ func New(cfg *pagarme.Config, recipientID string) *API {
 //
 // POST https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations
 func (api *API) NewAnticipation(req *pagarme.CreateAnticipation) (response *pagarme.Response, anticipation *pagarme.Anticipation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations", api.RecipientID), www.JSONReader(req))
+	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations", api.RecipientID), nil, www.JSONReader(req))
 	if rerr != nil {
 		return
 	}
@@ -52,18 +52,22 @@ type GetLimitsInput struct {
 	PaymentDate int64
 }
 
-func (in *GetLimitsInput) Export() string {
+func (in *GetLimitsInput) Values() url.Values {
 	vv := url.Values{}
 	vv.Set("timeframe", string(in.Timeframe))
 	vv.Set("payment_date", strconv.FormatInt(in.PaymentDate, 10))
-	return vv.Encode()
+	return vv
+}
+
+func (in *GetLimitsInput) Export() string {
+	return in.Values().Encode()
 }
 
 // GetLimits returns the limits a new anticipation can be created with
 //
 // GET https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/limits
 func (api *API) GetLimits(input GetLimitsInput) (response *pagarme.Response, limits *pagarme.Limits, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/bulk_anticipations/limits?%s", api.RecipientID, input.Export()), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/bulk_anticipations/limits", api.RecipientID), input.Values(), nil)
 	if rerr != nil {
 		return
 	}
@@ -86,7 +90,7 @@ func (api *API) GetLimits(input GetLimitsInput) (response *pagarme.Response, lim
 //
 // POST https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/bulk_anticipation_id/confirm
 func (api *API) ConfirmNewAnticipation(bulkAnticipationId string) (response *pagarme.Response, anticipation *pagarme.Anticipation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s/confirm", api.RecipientID, bulkAnticipationId), nil)
+	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s/confirm", api.RecipientID, bulkAnticipationId), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -109,7 +113,7 @@ func (api *API) ConfirmNewAnticipation(bulkAnticipationId string) (response *pag
 //
 // POST https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/bulk_anticipation_id/cancel
 func (api *API) CancelPendingAnticipation(bulkAnticipationId string) (response *pagarme.Response, anticipation *pagarme.Anticipation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s/cancel", api.RecipientID, bulkAnticipationId), nil)
+	resp, rerr := api.Config.Do(http.MethodPost, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s/cancel", api.RecipientID, bulkAnticipationId), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -136,7 +140,7 @@ type QueryInput struct {
 	Value  string
 }
 
-func (in *QueryInput) Export() string {
+func (in *QueryInput) Values() url.Values {
 	vv := url.Values{}
 	if in.Count != 0 {
 		vv.Set("count", strconv.Itoa(in.Count))
@@ -149,14 +153,18 @@ func (in *QueryInput) Export() string {
 	if in.Filter != "" {
 		vv.Set(in.Filter, in.Value)
 	}
-	return vv.Encode()
+	return vv
+}
+
+func (in *QueryInput) Export() string {
+	return in.Values().Encode()
 }
 
 // Delete
 //
 // DELETE https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/bulk_anticipation_id
 func (api *API) Delete(bulkAnticipationId string) (response *pagarme.Response, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodDelete, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s", api.RecipientID, bulkAnticipationId), nil)
+	resp, rerr := api.Config.Do(http.MethodDelete, fmt.Sprintf("/recipients/%s/bulk_anticipations/%s", api.RecipientID, bulkAnticipationId), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -172,7 +180,7 @@ func (api *API) Delete(bulkAnticipationId string) (response *pagarme.Response, r
 //
 // GET https://api.pagar.me/1/recipients/recipient_id/bulk_anticipations/
 func (api *API) Query(input QueryInput) (response *pagarme.Response, anticipations []pagarme.Anticipation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/bulk_anticipations/?%s", api.RecipientID, input.Export()), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/bulk_anticipations", api.RecipientID), input.Values(), nil)
 	if rerr != nil {
 		return
 	}

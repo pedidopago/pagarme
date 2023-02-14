@@ -24,10 +24,7 @@ func New(cfg *pagarme.Config) *API {
 //
 func (api *API) Query(input *QueryInput) (response *pagarme.Response, chargebacks []pagarme.Chargeback, rerr error) {
 	url := "/chargebacks"
-	if input != nil {
-		url += "?" + input.Build()
-	}
-	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, input.Values(), nil)
 	if rerr != nil {
 		return
 	}

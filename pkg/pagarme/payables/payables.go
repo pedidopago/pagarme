@@ -24,10 +24,7 @@ func New(cfg *pagarme.Config) *API {
 //
 func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, error) {
 	urlpart := "/payables"
-	if input != nil {
-		urlpart += "?" + input.Build()
-	}
-	resp, err := api.Config.Do(http.MethodGet, urlpart, nil)
+	resp, err := api.Config.Do(http.MethodGet, urlpart, input.Values(), nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -47,7 +44,7 @@ func (api *API) Query(input *QueryInput) (*pagarme.Response, []pagarme.Payable, 
 //
 // GET https://api.pagar.me/1/payables/payable_id
 func (api *API) Get(id string) (response *pagarme.Response, payable *pagarme.Payable, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/payables/"+id, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/payables/"+id, nil, nil)
 	if rerr != nil {
 		return
 	}

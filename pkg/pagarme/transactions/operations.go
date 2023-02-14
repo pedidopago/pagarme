@@ -12,7 +12,7 @@ import (
 //
 //
 func (api *API) QueryOperations(tid string) (response *pagarme.Response, operations []pagarme.TransactionOperation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transactions/%s/operations", tid), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/transactions/%s/operations", tid), nil, nil)
 	if rerr != nil {
 		return
 	}
