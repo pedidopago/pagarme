@@ -50,7 +50,7 @@ func (qi *QueryInput) RecipientID(v string) *QueryInput {
 func (qi *QueryInput) Count(v int) *QueryInput {
 	qi.init()
 	qi.b.Set(&pagarme.QueryInt{
-		Name: "count",
+		Name: "limit",
 		Op:   pagarme.QueryOpEquals,
 		V:    v,
 	})
