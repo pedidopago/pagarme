@@ -19,26 +19,18 @@ func (qi *QueryInput) init() {
 	}
 }
 
-// PaymentDateStart -> Filtro pela data de pagamento da liquidação
-// deve ser fornecido juntamente com PaymentDateEnd
-func (qi *QueryInput) PaymentDateStart(yyyy int, mm time.Month, dd int) *QueryInput {
+// PaymentDate -> Filtro pela data de pagamento da liquidação (não considera o campo das horas)
+func (qi *QueryInput) PaymentDate(start, end time.Time) *QueryInput {
 	qi.init()
 	qi.b.Add(&pagarme.QueryString{
 		Name: "payment_date_start",
 		Op:   pagarme.QueryOpEquals,
-		V:    fmt.Sprintf("%d-%02d-%02d", yyyy, mm, dd),
+		V:    fmt.Sprintf("%d-%02d-%02d", start.Year(), start.Month(), start.Day()),
 	})
-	return qi
-}
-
-// PaymentDateEnd -> Filtro pela data de pagamento da liquidação
-// deve ser fornecido juntamente com PaymentDateStart
-func (qi *QueryInput) PaymentDateEnd(yyyy int, mm time.Month, dd int) *QueryInput {
-	qi.init()
 	qi.b.Add(&pagarme.QueryString{
 		Name: "payment_date_end",
 		Op:   pagarme.QueryOpEquals,
-		V:    fmt.Sprintf("%d-%02d-%02d", yyyy, mm, dd),
+		V:    fmt.Sprintf("%d-%02d-%02d", end.Year(), end.Month(), end.Day()),
 	})
 	return qi
 }
