@@ -3,6 +3,7 @@ package settlements
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
@@ -46,6 +47,16 @@ func (qi *QueryInput) RecipientID(v string) *QueryInput {
 	return qi
 }
 
+func (qi *QueryInput) GetIspb(v bool) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "get_ispb",
+		Op:   pagarme.QueryOpEquals,
+		V:    strconv.FormatBool(v),
+	})
+	return qi
+}
+
 // Count -> Parâmetro de quantos resultados devem ser retornados
 func (qi *QueryInput) Count(v int) *QueryInput {
 	qi.init()
@@ -60,7 +71,7 @@ func (qi *QueryInput) Count(v int) *QueryInput {
 // GetCount -> retorna quantos resultados devem ser retornados
 func (qi *QueryInput) GetCount() int {
 	qi.init()
-	qiface := qi.b.Get("count")
+	qiface := qi.b.Get("limit")
 	if qiface == nil {
 		return 0
 	}
@@ -79,6 +90,18 @@ func (qi *QueryInput) Page(v int) *QueryInput {
 		V:    v,
 	})
 	return qi
+}
+
+func (qi *QueryInput) GetPage() int {
+	qi.init()
+	qiface := qi.b.Get("page")
+	if qiface == nil {
+		return 0
+	}
+	if q, ok := qiface.(*pagarme.QueryInt); ok {
+		return q.V
+	}
+	return 0
 }
 
 // Build builds the settlement query to a urlencoded format
