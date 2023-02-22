@@ -15,13 +15,13 @@ const (
 	// QueryOpEquals =
 	QueryOpEquals QueryOp = ""
 	// QueryOpGreaterThan >
-	QueryOpGreaterThan QueryOp = "%3E"
+	QueryOpGreaterThan QueryOp = ">"
 	// QueryOpLessThan <
-	QueryOpLessThan QueryOp = "%3C"
+	QueryOpLessThan QueryOp = "<"
 	// QueryOpGreaterOrEqualThan >=
-	QueryOpGreaterOrEqualThan QueryOp = "%3E%3D"
+	QueryOpGreaterOrEqualThan QueryOp = ">="
 	// QueryOpLessOrEqualThan <=
-	QueryOpLessOrEqualThan QueryOp = "%3C%3D"
+	QueryOpLessOrEqualThan QueryOp = "<="
 )
 
 type Querier interface {
@@ -39,7 +39,7 @@ type QueryTime struct {
 
 // Format to pagarme query
 func (qt *QueryTime) Format() string {
-	return fmt.Sprintf("%v=%v%v", qt.PName(), string(qt.Op), qt.T.UnixNano()/1000000)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
@@ -61,7 +61,7 @@ type QueryInt struct {
 
 // Format to pagarme query
 func (qt *QueryInt) Format() string {
-	return fmt.Sprintf("%v=%v%v", qt.PName(), string(qt.Op), qt.V)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
@@ -82,7 +82,7 @@ type QueryString struct {
 
 // Format to pagarme query
 func (qt *QueryString) Format() string {
-	return fmt.Sprintf("%v=%v%v", qt.PName(), string(qt.Op), qt.V)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
