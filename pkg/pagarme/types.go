@@ -38,7 +38,7 @@ type SplitRule struct {
 	ChargeProcessingFee bool          `json:"charge_processing_fee" form:"charge_processing_fee"`
 	Percentage          Float64String `json:"percentage,omitempty" form:"percentage,omitempty"`
 	Amount              Int64String   `json:"amount,omitempty" form:"amount,omitempty"`
-	ChargeRemainderFee  bool          `json:"charge_remainder_fee" form:"charge_remainder_fee"`
+	ChargeRemainder     bool          `json:"charge_remainder" form:"charge_remainder"`
 	RecipientID         string        `json:"recipient_id" form:"recipient_id"`
 	DateCreated         time.Time     `json:"date_created" form:"date_created"`
 	DateUpdated         time.Time     `json:"date_updated" form:"date_updated"`
