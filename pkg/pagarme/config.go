@@ -142,7 +142,10 @@ func (c *Config) Do(method, urlpart string, query url.Values, body io.Reader) (*
 
 func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Response, inerr error) (*http.Response, error) {
 	c.Logger.Debug("rateLimitReachedHandler")
-	retryAfterSec, _ := strconv.Atoi(inresp.Header.Get("Retry-After"))
+	retryAfterSec, err := strconv.Atoi(inresp.Header.Get("Retry-After"))
+	if err != nil {
+		retryAfterSec = 1
+	}
 	retryAfter := time.Duration(retryAfterSec) * time.Second
 	if c.TimeoutRetry != 0 {
 		if retryAfter > c.TimeoutRetry {
@@ -152,6 +155,8 @@ func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Respons
 	}
 
 	retryStartedAt := time.Now()
+
+	c.Logger.Debug(fmt.Sprintf("rateLimitReachedHandler: will retry after %d seconds", retryAfterSec))
 
 	time.Sleep(retryAfter)
 	if c.ExpBackOffParams == nil {
