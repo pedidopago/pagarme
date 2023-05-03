@@ -1,7 +1,9 @@
-package refunds
+package settlements
 
 import (
+	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
@@ -18,35 +20,39 @@ func (qi *QueryInput) init() {
 	}
 }
 
-// DateCreated -> Filtro pela data de criação do estorno
-func (qi *QueryInput) DateCreated(op pagarme.QueryOp, t time.Time) *QueryInput {
-	qi.init()
-	qi.b.Add(&pagarme.QueryTime{
-		Name: "date_created",
-		Op:   op,
-		T:    t,
-	})
-	return qi
-}
-
-// DateUpdated -> Filtro pela data de atualização do estorno
-func (qi *QueryInput) DateUpdated(op pagarme.QueryOp, t time.Time) *QueryInput {
-	qi.init()
-	qi.b.Add(&pagarme.QueryTime{
-		Name: "date_updated",
-		Op:   op,
-		T:    t,
-	})
-	return qi
-}
-
-// TransactionID -> Filtro pelo ID da transação referida pelo estorno
-func (qi *QueryInput) TransactionID(v string) *QueryInput {
+// PaymentDate -> Filtro pela data de pagamento da liquidação (não considera o campo das horas)
+func (qi *QueryInput) PaymentDate(start, end time.Time) *QueryInput {
 	qi.init()
 	qi.b.Add(&pagarme.QueryString{
-		Name: "transaction_id",
+		Name: "payment_date_start",
+		Op:   pagarme.QueryOpEquals,
+		V:    fmt.Sprintf("%d-%02d-%02d", start.Year(), start.Month(), start.Day()),
+	})
+	qi.b.Add(&pagarme.QueryString{
+		Name: "payment_date_end",
+		Op:   pagarme.QueryOpEquals,
+		V:    fmt.Sprintf("%d-%02d-%02d", end.Year(), end.Month(), end.Day()),
+	})
+	return qi
+}
+
+// RecipientID -> Filtro pelo ID do recebedor atrelado
+func (qi *QueryInput) RecipientID(v string) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "recipient_id",
 		Op:   pagarme.QueryOpEquals,
 		V:    v,
+	})
+	return qi
+}
+
+func (qi *QueryInput) GetIspb(v bool) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "get_ispb",
+		Op:   pagarme.QueryOpEquals,
+		V:    strconv.FormatBool(v),
 	})
 	return qi
 }
@@ -55,7 +61,7 @@ func (qi *QueryInput) TransactionID(v string) *QueryInput {
 func (qi *QueryInput) Count(v int) *QueryInput {
 	qi.init()
 	qi.b.Set(&pagarme.QueryInt{
-		Name: "count",
+		Name: "limit",
 		Op:   pagarme.QueryOpEquals,
 		V:    v,
 	})
@@ -65,7 +71,7 @@ func (qi *QueryInput) Count(v int) *QueryInput {
 // GetCount -> retorna quantos resultados devem ser retornados
 func (qi *QueryInput) GetCount() int {
 	qi.init()
-	qiface := qi.b.Get("count")
+	qiface := qi.b.Get("limit")
 	if qiface == nil {
 		return 0
 	}
@@ -86,7 +92,19 @@ func (qi *QueryInput) Page(v int) *QueryInput {
 	return qi
 }
 
-// Build builds the payable query to a urlencoded format
+func (qi *QueryInput) GetPage() int {
+	qi.init()
+	qiface := qi.b.Get("page")
+	if qiface == nil {
+		return 0
+	}
+	if q, ok := qiface.(*pagarme.QueryInt); ok {
+		return q.V
+	}
+	return 0
+}
+
+// Build builds the settlement query to a urlencoded format
 func (qi *QueryInput) Build() string {
 	qi.init()
 	return qi.b.Build()

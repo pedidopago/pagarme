@@ -26,7 +26,7 @@ func New(cfg *pagarme.Config) *API {
 //
 // POST https://api.pagar.me/1/transactions
 func (api *API) Put(tr *pagarme.Transaction) (*pagarme.Response, *pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodPost, "/transactions", www.JSONReader(tr))
+	resp, err := api.Config.Do(http.MethodPost, "/transactions", nil, www.JSONReader(tr))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -46,7 +46,7 @@ func (api *API) Put(tr *pagarme.Transaction) (*pagarme.Response, *pagarme.Transa
 //
 // GET https://api.pagar.me/1/transactions/id
 func (api *API) Get(tid string) (*pagarme.Response, *pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodGet, "/transactions/"+tid, nil)
+	resp, err := api.Config.Do(http.MethodGet, "/transactions/"+tid, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -72,7 +72,7 @@ type QueryInput struct {
 	DateCreatedTo   string // Unix timestamp WITH MILLISECONDS
 }
 
-func (qi *QueryInput) Export() string {
+func (qi *QueryInput) Values() url.Values {
 	vv := url.Values{}
 	for k, v := range qi.Metadata {
 		fmt.Println("K", k, "V", v)
@@ -95,13 +95,16 @@ func (qi *QueryInput) Export() string {
 		vv.Add("date_created", ">="+qi.DateCreatedFrom)
 		vv.Add("date_created", "<="+qi.DateCreatedTo)
 	}
-	vvs := vv.Encode() //strings.Replace(vv.Encode(), "%2E", ".", -1)
-	return vvs
+	return vv
+}
+
+func (qi *QueryInput) Export() string {
+	return qi.Values().Encode() //strings.Replace(vv.Encode(), "%2E", ".", -1)
 }
 
 // Query transactions
 func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodGet, "/transactions?"+input.Export(), nil)
+	resp, err := api.Config.Do(http.MethodGet, "/transactions", input.Values(), nil)
 	if api.Config.Trace {
 		api.Config.Logger.Info("/transactions?" + input.Export())
 	}
@@ -126,7 +129,7 @@ func (api *API) Query(input QueryInput) (*pagarme.Response, []pagarme.Transactio
 //
 // PUT https://api.pagar.me/1/transactions/transaction_id
 func (api *API) PutDevBillet(tid string, status pagarme.TrStatus) (*pagarme.Response, *pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodPut, "/transactions/"+tid, www.JSONReader(map[string]interface{}{
+	resp, err := api.Config.Do(http.MethodPut, "/transactions/"+tid, nil, www.JSONReader(map[string]interface{}{
 		"status": string(status),
 	}))
 	if err != nil {
@@ -162,7 +165,7 @@ type RefundInput struct {
 //
 // POST https://api.pagar.me/1/transactions/transaction_id/refund
 func (api *API) Refund(id int64, input *RefundInput) (*pagarme.Response, *pagarme.Transaction, error) {
-	resp, err := api.Config.Do(http.MethodPost, "/transactions/"+strconv.Itoa(int(id))+"/refund", www.JSONReader(input))
+	resp, err := api.Config.Do(http.MethodPost, "/transactions/"+strconv.Itoa(int(id))+"/refund", nil, www.JSONReader(input))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -184,7 +187,7 @@ func (api *API) Refund(id int64, input *RefundInput) (*pagarme.Response, *pagarm
 //
 // GET https://api.pagar.me/1/transactions/card_hash_key
 func (api *API) CardHashKey() (response *pagarme.Response, cardHash *pagarme.CardHash, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/card_hash_key", nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/card_hash_key", nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -205,7 +208,7 @@ func (api *API) CardHashKey() (response *pagarme.Response, cardHash *pagarme.Car
 //
 // GET https://api.pagar.me/1/transactions/id/payables
 func (api *API) Payables(tid string) (response *pagarme.Response, payables []pagarme.Payable, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/"+tid+"/payables", nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/transactions/"+tid+"/payables", nil, nil)
 	if rerr != nil {
 		return
 	}

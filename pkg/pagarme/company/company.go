@@ -25,7 +25,7 @@ func New(cfg *pagarme.Config) *API {
 //
 func (api *API) Get() (response *pagarme.Response, rerr error) {
 	url := "/company"
-	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, nil, nil)
 	if rerr != nil {
 		return
 	}

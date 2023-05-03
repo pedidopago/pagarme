@@ -38,7 +38,7 @@ type QueryInput struct {
 	Extra          map[string]string
 }
 
-func (in *QueryInput) Export() string {
+func (in *QueryInput) Values() url.Values {
 	vv := url.Values{}
 	if in.Count != 0 {
 		vv.Set("count", strconv.Itoa(in.Count))
@@ -78,11 +78,15 @@ func (in *QueryInput) Export() string {
 	for k, v := range in.Extra {
 		vv.Set(k, v)
 	}
-	return vv.Encode()
+	return vv
+}
+
+func (in *QueryInput) Export() string {
+	return in.Values().Encode()
 }
 
 func (api *API) Query(input QueryInput) (response *pagarme.Response, accounts []pagarme.BankAccount, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/bank_accounts?%s", input.Export()), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/bank_accounts", input.Values(), nil)
 	if rerr != nil {
 		return
 	}
@@ -102,7 +106,7 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, accounts []
 }
 
 func (api *API) Get(id int) (response *pagarme.Response, account *pagarme.BankAccount, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/bank_accounts/%d", id), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/bank_accounts/%d", id), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -122,7 +126,7 @@ func (api *API) Get(id int) (response *pagarme.Response, account *pagarme.BankAc
 }
 
 func (api *API) Create(createInput pagarme.BankAccount) (response *pagarme.Response, account *pagarme.BankAccount, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPost, "/bank_accounts", www.JSONReader(createInput))
+	resp, rerr := api.Config.Do(http.MethodPost, "/bank_accounts", nil, www.JSONReader(createInput))
 	if rerr != nil {
 		return
 	}

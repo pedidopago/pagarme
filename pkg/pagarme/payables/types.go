@@ -1,6 +1,7 @@
 package payables
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/pedidopago/pagarme/v2/pkg/pagarme"
@@ -127,6 +128,16 @@ func (qi *QueryInput) Type(v pagarme.PayableType) *QueryInput {
 	return qi
 }
 
+func (qi *QueryInput) LiquidationArrangementID(v string) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "liquidation_arrangement_id",
+		Op:   pagarme.QueryOpEquals,
+		V:    v,
+	})
+	return qi
+}
+
 // ID -> Filtro pelo ID do recebível
 func (qi *QueryInput) ID(v string) *QueryInput {
 	qi.init()
@@ -177,4 +188,9 @@ func (qi *QueryInput) Page(v int) *QueryInput {
 func (qi *QueryInput) Build() string {
 	qi.init()
 	return qi.b.Build()
+}
+
+func (qi *QueryInput) Values() url.Values {
+	qi.init()
+	return qi.b.Values()
 }

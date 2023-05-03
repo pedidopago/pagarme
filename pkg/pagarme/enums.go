@@ -94,7 +94,7 @@ const (
 type AnticipationType string
 
 const (
-	AntTypeSpot      AnticipationType = "spot"
+	AntTypeSpot AnticipationType = "spot"
 	// TODO: automatic type
 )
 
@@ -132,4 +132,26 @@ const (
 	BalOpTypeAnticipation  BalanceOperationType = "anticipation"
 	BalOpTypeTransfer      BalanceOperationType = "transfer"
 	BalOpTypeFeeCollection BalanceOperationType = "fee_collection"
+)
+
+type SettlementStatus string
+
+const (
+	SettlStatusAwaitingResponse SettlementStatus = "awaiting_response"
+	SettlStatusConfirmed        SettlementStatus = "confirmed"
+	SettlStatusSuccess          SettlementStatus = "success"
+)
+
+type SettlementProduct string
+
+const (
+	SettlProductBoleto SettlementProduct = "boleto"
+	SettlProductCredit SettlementProduct = "credit"
+)
+
+type LiquidationType string
+
+const (
+	LiqTypeInternal LiquidationType = "internal"
+	LiqTypeExternal LiquidationType = "external"
 )

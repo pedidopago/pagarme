@@ -13,20 +13,21 @@ type QueryOp string
 
 const (
 	// QueryOpEquals =
-	QueryOpEquals QueryOp = "="
+	QueryOpEquals QueryOp = ""
 	// QueryOpGreaterThan >
-	QueryOpGreaterThan QueryOp = "=%3E"
+	QueryOpGreaterThan QueryOp = ">"
 	// QueryOpLessThan <
-	QueryOpLessThan QueryOp = "=%3C"
+	QueryOpLessThan QueryOp = "<"
 	// QueryOpGreaterOrEqualThan >=
-	QueryOpGreaterOrEqualThan QueryOp = "=%3E%3D"
+	QueryOpGreaterOrEqualThan QueryOp = ">="
 	// QueryOpLessOrEqualThan <=
-	QueryOpLessOrEqualThan QueryOp = "=%3C%3D"
+	QueryOpLessOrEqualThan QueryOp = "<="
 )
 
 type Querier interface {
 	Format() string
 	PName() string
+	PValue() string
 }
 
 // QueryTime is used on datetime queries
@@ -38,12 +39,17 @@ type QueryTime struct {
 
 // Format to pagarme query
 func (qt *QueryTime) Format() string {
-	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.T.UnixNano()/1000000)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
 func (qt *QueryTime) PName() string {
-	return qt.Name
+	return url.PathEscape(qt.Name)
+}
+
+// PValue of the query param
+func (qt *QueryTime) PValue() string {
+	return fmt.Sprintf("%v%v", string(qt.Op), qt.T.UnixNano()/1000000)
 }
 
 // QueryInt is used on integer queries
@@ -55,12 +61,16 @@ type QueryInt struct {
 
 // Format to pagarme query
 func (qt *QueryInt) Format() string {
-	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.V)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
 func (qt *QueryInt) PName() string {
-	return qt.Name
+	return url.PathEscape(qt.Name)
+}
+
+func (qt *QueryInt) PValue() string {
+	return fmt.Sprintf("%v%v", string(qt.Op), qt.V)
 }
 
 // QueryString is used on string queries
@@ -72,12 +82,17 @@ type QueryString struct {
 
 // Format to pagarme query
 func (qt *QueryString) Format() string {
-	return fmt.Sprintf("%v%v%v", url.PathEscape(qt.Name), string(qt.Op), qt.V)
+	return fmt.Sprintf("%s=%s", qt.PName(), url.QueryEscape(qt.PValue()))
 }
 
 // PName of the query param
 func (qt *QueryString) PName() string {
-	return qt.Name
+	return url.PathEscape(qt.Name)
+}
+
+// PValue of the query param
+func (qt *QueryString) PValue() string {
+	return fmt.Sprintf("%v%v", string(qt.Op), qt.V)
 }
 
 type QueryBuilder struct {
@@ -143,4 +158,15 @@ func (b *QueryBuilder) Build() string {
 		sb.WriteString(v.Format())
 	}
 	return sb.String()
+}
+
+func (b *QueryBuilder) Values() url.Values {
+	b.lock.Lock()
+	defer b.lock.Unlock()
+	values := make(url.Values)
+	for _, v := range b.items {
+		n := v.PName()
+		values[n] = append(values[n], v.PValue())
+	}
+	return values
 }

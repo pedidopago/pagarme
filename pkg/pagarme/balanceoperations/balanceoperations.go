@@ -20,7 +20,7 @@ func New(cfg *pagarme.Config) *API {
 }
 
 func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.BalanceOperation, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, "/balance/operations/"+id, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, "/balance/operations/"+id, nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -44,10 +44,7 @@ func (api *API) Get(id string) (response *pagarme.Response, operation *pagarme.B
 // GET https://api.pagar.me/1/balance/operations
 func (api *API) Query(params *pagarme.QueryBuilder) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
 	url := "/balance/operations"
-	if params != nil {
-		url += "?" + params.Build()
-	}
-	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, params.Values(), nil)
 	if rerr != nil {
 		return
 	}

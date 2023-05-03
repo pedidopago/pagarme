@@ -22,7 +22,7 @@ func New(cfg *pagarme.Config) *API {
 
 // NewRecipient consume a pagarme API to create a new recipient and return your informations
 func (api *API) NewRecipient(recipient *pagarme.CreateRecipient) (*pagarme.Response, *pagarme.Recipient, error) {
-	resp, err := api.Config.Do(http.MethodPost, "/recipients", www.JSONReader(recipient))
+	resp, err := api.Config.Do(http.MethodPost, "/recipients", nil, www.JSONReader(recipient))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -41,7 +41,7 @@ func (api *API) NewRecipient(recipient *pagarme.CreateRecipient) (*pagarme.Respo
 
 // UpdateRecipient consume a pagarme API to update a recipient and return its information
 func (api *API) UpdateRecipient(recipientId string, updateRecipient *pagarme.UpdateRecipient) (response *pagarme.Response, recipient *pagarme.Recipient, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodPut, fmt.Sprintf("/recipients/%s", recipientId), www.JSONReader(updateRecipient))
+	resp, rerr := api.Config.Do(http.MethodPut, fmt.Sprintf("/recipients/%s", recipientId), nil, www.JSONReader(updateRecipient))
 	if rerr != nil {
 		return
 	}
@@ -61,7 +61,7 @@ func (api *API) UpdateRecipient(recipientId string, updateRecipient *pagarme.Upd
 }
 
 func (api *API) GetRecipient(id string) (response *pagarme.Response, recipient *pagarme.Recipient, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s", id), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s", id), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -84,7 +84,7 @@ func (api *API) GetRecipient(id string) (response *pagarme.Response, recipient *
 //
 // https://api.pagar.me/1/recipients/recipient_id/balance
 func (api *API) GetBalance(recipientId string) (response *pagarme.Response, balance *pagarme.Balance, rerr error) {
-	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/balance", recipientId), nil)
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/balance", recipientId), nil, nil)
 	if rerr != nil {
 		return
 	}
@@ -108,10 +108,7 @@ func (api *API) GetBalance(recipientId string) (response *pagarme.Response, bala
 // https://api.pagar.me/1/recipients/recipient_id/balance/operations
 func (api *API) GetBalanceOperations(recipientId string, params *pagarme.QueryBuilder) (response *pagarme.Response, operations []pagarme.BalanceOperation, rerr error) {
 	url := fmt.Sprintf("/recipients/%s/balance/operations", recipientId)
-	if params != nil {
-		url += "?" + params.Build()
-	}
-	resp, rerr := api.Config.Do(http.MethodGet, url, nil)
+	resp, rerr := api.Config.Do(http.MethodGet, url, params.Values(), nil)
 	if rerr != nil {
 		return
 	}
@@ -135,9 +132,6 @@ func (api *API) GetBalanceOperations(recipientId string, params *pagarme.QueryBu
 // https://api.pagar.me/1/recipients/recipient_id/balance/operations.ext
 func (api *API) DownloadBalanceOperations(recipientId string, ext string, params *pagarme.QueryBuilder) (response *http.Response, rerr error) {
 	url := fmt.Sprintf("/recipients/%s/balance/operations.%s", recipientId, ext)
-	if params != nil {
-		url += "?" + params.Build()
-	}
-	response, rerr = api.Config.Do(http.MethodGet, url, nil)
+	response, rerr = api.Config.Do(http.MethodGet, url, params.Values(), nil)
 	return
 }
