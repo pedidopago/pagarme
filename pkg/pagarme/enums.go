@@ -8,6 +8,7 @@ const (
 	DocCPF      DocumentType = "cpf"
 	DocCNPJ     DocumentType = "cnpj"
 	DocPassport DocumentType = "passport"
+	DocOther    DocumentType = "other"
 )
 
 type CustomerType string
