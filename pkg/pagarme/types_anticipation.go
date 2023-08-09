@@ -34,3 +34,15 @@ type Anticipation struct {
 	DateCreated     time.Time             `json:"date_created,omitempty"`
 	DateUpdated     time.Time             `json:"date_updated,omitempty"`
 }
+
+type AnticipationSimulation struct {
+	Amount             int                   `json:"amount"`
+	Fee                int                   `json:"fee"`
+	FraudCoverageFee   int                   `json:"fraudCoverageFee"`
+	AnticipationAmount int                   `json:"anticipationAmount"`
+	AnticipationFee    int                   `json:"anticipationFee"`
+	Timeframe          AnticipationTimeframe `json:"timeframe"`
+	PaymentDate        time.Time             `json:"paymentDate"`
+	StartIntervalDate  time.Time             `json:"startIntervalDate"`
+	EndIntervalDate    time.Time             `json:"endIntervalDate"`
+}

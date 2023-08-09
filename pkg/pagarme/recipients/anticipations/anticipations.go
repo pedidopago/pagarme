@@ -198,3 +198,41 @@ func (api *API) Query(input QueryInput) (response *pagarme.Response, anticipatio
 	response = www.Ok(resp)
 	return
 }
+
+type GetSimulationInput struct {
+	Timeframe       pagarme.AnticipationTimeframe
+	PaymentDate     int64
+	RequestedAmount int
+}
+
+func (in *GetSimulationInput) Values() url.Values {
+	vv := url.Values{}
+	vv.Set("timeframe", string(in.Timeframe))
+	vv.Set("payment_date", strconv.FormatInt(in.PaymentDate, 10))
+	vv.Set("requested_amount", strconv.Itoa(in.RequestedAmount))
+	return vv
+}
+
+func (in *GetSimulationInput) Export() string {
+	return in.Values().Encode()
+}
+
+func (api *API) GetSimulation(input GetSimulationInput) (response *pagarme.Response, simulation *pagarme.AnticipationSimulation, rerr error) {
+	resp, rerr := api.Config.Do(http.MethodGet, fmt.Sprintf("/recipients/%s/bulk_anticipations/simulate", api.RecipientID), input.Values(), nil)
+	if rerr != nil {
+		return
+	}
+	if response = www.ExtractError(resp); response != nil {
+		return
+	}
+	result := new(pagarme.AnticipationSimulation)
+
+	if rerr = www.Unmarshal(api.Config, resp, result); rerr != nil {
+		api.Config.Logger.Error("could not unmarshal limits: " + rerr.Error())
+		return
+	}
+
+	simulation = result
+	response = www.Ok(resp)
+	return
+}
