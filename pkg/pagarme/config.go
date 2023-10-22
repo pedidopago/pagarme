@@ -141,6 +141,9 @@ func (c *Config) Do(method, urlpart string, query url.Values, body io.Reader) (*
 }
 
 func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Response, inerr error) (*http.Response, error) {
+	if r := inresp.Body; r != nil {
+		_ = r.Close()
+	}
 	c.Logger.Debug("rateLimitReachedHandler")
 	retryAfterSec, err := strconv.Atoi(inresp.Header.Get("Retry-After"))
 	if err != nil {
@@ -180,8 +183,13 @@ func (c *Config) rateLimitReachedHandler(req *http.Request, inresp *http.Respons
 		if rerr != nil {
 			return nil, rerr
 		}
-		if resp != nil && resp.StatusCode != http.StatusTooManyRequests {
-			break
+		if resp != nil {
+			if resp.StatusCode != http.StatusTooManyRequests {
+				break
+			}
+			if r := resp.Body; r != nil {
+				_ = r.Close()
+			}
 		}
 	}
 
