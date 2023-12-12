@@ -36,31 +36,31 @@ type Transaction struct {
 	//
 	// Data returned by pagar-me
 	//
-	Object               string           `json:"object,omitempty" form:"object,omitempty"`
-	Status               TrStatus         `json:"status,omitempty" form:"status,omitempty"`
-	RefuseReason         string           `json:"refuse_reason,omitempty" form:"refuse_reason,omitempty"`
-	StatusReason         string           `json:"status_reason,omitempty" form:"status_reason,omitempty"`
-	AcquirerResponseCode string           `json:"acquirer_response_code,omitempty" form:"acquirer_response_code,omitempty"`
-	AcquirerName         string           `json:"acquirer_name,omitempty" form:"acquirer_name,omitempty"`
-	AcquirerID           string           `json:"acquirer_id,omitempty" form:"acquirer_id,omitempty"`
-	AuthorizationCode    string           `json:"authorization_code,omitempty" form:"authorization_code,omitempty"`
-	TID                  int              `json:"tid,omitempty" form:"tid,omitempty"`
-	NSU                  int              `json:"nsu,omitempty" form:"nsu,omitempty"`
-	DateCreated          *time.Time       `json:"date_created,omitempty" form:"date_created,omitempty"`
-	DateUpdated          *time.Time       `json:"date_updated,omitempty" form:"date_updated,omitempty"`
-	AuthorizedAmount     int              `json:"authorized_amount,omitempty" form:"authorized_amount,omitempty"`
-	PaidAmount           int              `json:"paid_amount,omitempty" form:"paid_amount,omitempty"`
-	RefundedAmount       int              `json:"refunded_amount,omitempty" form:"refunded_amount,omitempty"`
-	ID                   int64            `json:"id,omitempty" form:"id,omitempty"`
-	Cost                 int              `json:"cost,omitempty" form:"cost,omitempty"`
-	CardFirstDigits      string           `json:"card_first_digits,omitempty" form:"card_first_digits,omitempty"`
-	CardLastDigits       string           `json:"card_last_digits,omitempty" form:"card_last_digits,omitempty"`
-	CardBrand            string           `json:"card_brand,omitempty" form:"card_brand,omitempty"`
-	Card                 *Card            `json:"card,omitempty" form:"card,omitempty"`
-	CaptureMethod        string           `json:"capture_method,omitempty" form:"capture_method,omitempty"`
-	CardPinMode          string           `json:"card_pin_mode,omitempty" form:"card_pin_mode,omitempty"`
-	PixData              *json.RawMessage `json:"pix_data,omitempty"`
-	PixQrCode            string           `json:"pix_qr_code,omitempty" form:"pix_qr_code,omitempty"`
+	Object               string         `json:"object,omitempty" form:"object,omitempty"`
+	Status               TrStatus       `json:"status,omitempty" form:"status,omitempty"`
+	RefuseReason         string         `json:"refuse_reason,omitempty" form:"refuse_reason,omitempty"`
+	StatusReason         string         `json:"status_reason,omitempty" form:"status_reason,omitempty"`
+	AcquirerResponseCode string         `json:"acquirer_response_code,omitempty" form:"acquirer_response_code,omitempty"`
+	AcquirerName         string         `json:"acquirer_name,omitempty" form:"acquirer_name,omitempty"`
+	AcquirerID           string         `json:"acquirer_id,omitempty" form:"acquirer_id,omitempty"`
+	AuthorizationCode    string         `json:"authorization_code,omitempty" form:"authorization_code,omitempty"`
+	TID                  int            `json:"tid,omitempty" form:"tid,omitempty"`
+	NSU                  int            `json:"nsu,omitempty" form:"nsu,omitempty"`
+	DateCreated          *time.Time     `json:"date_created,omitempty" form:"date_created,omitempty"`
+	DateUpdated          *time.Time     `json:"date_updated,omitempty" form:"date_updated,omitempty"`
+	AuthorizedAmount     int            `json:"authorized_amount,omitempty" form:"authorized_amount,omitempty"`
+	PaidAmount           int            `json:"paid_amount,omitempty" form:"paid_amount,omitempty"`
+	RefundedAmount       int            `json:"refunded_amount,omitempty" form:"refunded_amount,omitempty"`
+	ID                   int64          `json:"id,omitempty" form:"id,omitempty"`
+	Cost                 int            `json:"cost,omitempty" form:"cost,omitempty"`
+	CardFirstDigits      string         `json:"card_first_digits,omitempty" form:"card_first_digits,omitempty"`
+	CardLastDigits       string         `json:"card_last_digits,omitempty" form:"card_last_digits,omitempty"`
+	CardBrand            string         `json:"card_brand,omitempty" form:"card_brand,omitempty"`
+	Card                 *Card          `json:"card,omitempty" form:"card,omitempty"`
+	CaptureMethod        string         `json:"capture_method,omitempty" form:"capture_method,omitempty"`
+	CardPinMode          string         `json:"card_pin_mode,omitempty" form:"card_pin_mode,omitempty"`
+	PixData              map[string]any `json:"pix_data,omitempty" form:"pix_data,omitempty"`
+	PixQrCode            string         `json:"pix_qr_code,omitempty" form:"pix_qr_code,omitempty"`
 	// card_magstripe_fallback
 	AntifraudScore float64 `json:"antifraud_score,omitempty" form:"antifraud_score,omitempty"`
 	BoletoURL      string  `json:"boleto_url,omitempty" form:"boleto_url,omitempty"`
@@ -121,7 +121,8 @@ func (t *Transaction) GetPixData() *PixData {
 		return nil
 	}
 	var data PixData
-	if json.Unmarshal(*t.PixData, &data) != nil {
+	b, _ := json.Marshal(t.PixData)
+	if json.Unmarshal(b, &data) != nil {
 		return nil
 	}
 	return &data
