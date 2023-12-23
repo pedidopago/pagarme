@@ -59,6 +59,7 @@ type Transaction struct {
 	Card                 *Card          `json:"card,omitempty" form:"card,omitempty"`
 	CaptureMethod        string         `json:"capture_method,omitempty" form:"capture_method,omitempty"`
 	CardPinMode          string         `json:"card_pin_mode,omitempty" form:"card_pin_mode,omitempty"`
+	CardFundingSource    string         `json:"card_funding_source,omitempty" form:"card_funding_source,omitempty"`
 	PixData              map[string]any `json:"pix_data,omitempty" form:"pix_data,omitempty"`
 	PixQrCode            string         `json:"pix_qr_code,omitempty" form:"pix_qr_code,omitempty"`
 	// card_magstripe_fallback
