@@ -47,6 +47,16 @@ func (qi *QueryInput) RecipientID(v string) *QueryInput {
 	return qi
 }
 
+func (qi *QueryInput) SettlementID(v string) *QueryInput {
+	qi.init()
+	qi.b.Add(&pagarme.QueryString{
+		Name: "settlement_id",
+		Op:   pagarme.QueryOpEquals,
+		V:    v,
+	})
+	return qi
+}
+
 func (qi *QueryInput) GetIspb(v bool) *QueryInput {
 	qi.init()
 	qi.b.Add(&pagarme.QueryString{
