@@ -10,6 +10,31 @@ func TestMarshalI64(t *testing.T) {
 	if string(strb) != "\"180\"" {
 		t.Fatal(string(strb))
 	}
+	v = Int64String(1800)
+	strb, _ = v.MarshalJSON()
+	if string(strb) != "\"1800\"" {
+		t.Fatal(string(strb))
+	}
+	v = Int64String(18000)
+	strb, _ = v.MarshalJSON()
+	if string(strb) != "\"18000\"" {
+		t.Fatal(string(strb))
+	}
+	v = Int64String(18000)
+	strb, _ = v.MarshalJSON()
+	if string(strb) != "\"18000\"" {
+		t.Fatal(string(strb))
+	}
+	v = Int64String(180000)
+	strb, _ = v.MarshalJSON()
+	if string(strb) != "\"180000\"" {
+		t.Fatal(string(strb))
+	}
+	v = Int64String(1800000)
+	strb, _ = v.MarshalJSON()
+	if string(strb) != "\"1800000\"" {
+		t.Fatal(string(strb))
+	}
 }
 
 func TestUnmarshalI64(t *testing.T) {

@@ -31,7 +31,7 @@ func (n Int64String) Value() (driver.Value, error) {
 	if n == 0 {
 		return nil, nil
 	}
-	return float64(n), nil
+	return int64(n), nil
 }
 
 // UnmarshalJSON implements json.Unmarshaler
@@ -64,5 +64,5 @@ func (n *Int64String) UnmarshalJSON(v []byte) error {
 
 // MarshalJSON implements json.Marshaler
 func (n *Int64String) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("\"%v\"", float64(*n))), nil
+	return []byte(fmt.Sprintf("\"%d\"", *n)), nil
 }
