@@ -6,6 +6,7 @@ import (
 )
 
 type Transaction struct {
+	ServiceRefererName   string                 `json:"service_referer_name" form:"service_referer_name"`
 	Amount               int                    `json:"amount" form:"amount"`
 	CardHash             string                 `json:"card_hash,omitempty" form:"card_hash,omitempty"`
 	CardID               string                 `json:"card_id,omitempty" form:"card_id,omitempty"`
